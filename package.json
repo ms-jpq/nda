@@ -1,0 +1,31 @@
+{
+  "author": "_",
+  "dependencies": {},
+  "description": "_",
+  "devDependencies": {
+    "@types/node": "*",
+    "@types/nodemon": "*",
+    "@typescript-eslint/eslint-plugin": "*",
+    "@typescript-eslint/parser": "*",
+    "eslint": "*",
+    "eslint-config-prettier": "*",
+    "eslint-plugin-prettier": "*",
+    "nodemon": "*",
+    "parse-gitignore": "*",
+    "prettier": "*",
+    "ts-node": "*",
+    "typescript": "*"
+  },
+  "homepage": "https://ms-jpq.github.io/nda",
+  "license": "MIT",
+  "main": "_",
+  "name": "nda",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ms-jpq/nda.git"
+  },
+  "scripts": {
+    "prettier": "prettier --write **/**.tsx --write **/**.ts"
+  },
+  "version": "1.0.0"
+}
