@@ -23,7 +23,7 @@
     "url": "git+https://github.com/ms-jpq/nda.git"
   },
   "scripts": {
-    "postinstall": "tsc",
+    "postinstall": "echo $PWD",
     "pretty": "prettier --write **/**.tsx --write **/**.ts"
   },
   "version": "1.0.0"
