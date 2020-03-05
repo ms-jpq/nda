@@ -109,7 +109,7 @@ export const partition = <T, U extends keyof any>(
   const res = Object.create(null)
   for (const ele of lst) {
     const key = key_by(ele)
-    ;(res[key] || (res[key] = [])).push(ele)
+    ;(res[key] ?? (res[key] = [])).push(ele)
   }
   return res
 }

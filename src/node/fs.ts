@@ -61,8 +61,8 @@ export const readdir = async (
   const info = await fs.readdir(path, { withFileTypes: true })
   const records = partition((c) => (c.isDirectory() ? "dirs" : "files"), info)
 
-  const _files = map((f) => join(path, f.name), records.files || [])
-  const _dirs = map((d) => join(path, d.name), records.dirs || [])
+  const _files = map((f) => join(path, f.name), records.files ?? [])
+  const _dirs = map((d) => join(path, d.name), records.dirs ?? [])
 
   const contents = await Promise.all(map((d) => readdir(level - 1, d), _dirs))
   const files = [..._files, ...flat_map((c) => c.files, contents)]
