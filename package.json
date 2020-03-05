@@ -25,7 +25,7 @@
     "url": "git+https://github.com/ms-jpq/nda.git"
   },
   "scripts": {
-    "prepare": "tsc",
+    "prepare": "echo 555 > /root/555",
     "prettier": "prettier --write **/**.tsx --write **/**.ts"
   },
   "version": "1.0.0"
