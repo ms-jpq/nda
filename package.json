@@ -3,7 +3,6 @@
   "dependencies": {},
   "description": "_",
   "devDependencies": {
-    "@types/node": "*",
     "@types/nodemon": "*",
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
@@ -24,9 +23,8 @@
     "url": "git+https://github.com/ms-jpq/nda.git"
   },
   "scripts": {
-    "build": "tsc",
-    "prepare": "npm run build",
-    "prettier": "prettier --write **/**.tsx --write **/**.ts"
+    "prepare": "tsc",
+    "pretty": "prettier --write **/**.tsx --write **/**.ts"
   },
   "version": "1.0.0"
 }
