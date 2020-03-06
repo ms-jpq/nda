@@ -37,6 +37,14 @@ export const filter = <T>(predicate: (_: T) => boolean, lst: T[]) =>
 export const reduce = <T, U>(trans: (_: U, __: T) => U, init: U, lst: T[]) =>
   lst.reduce(trans, init)
 
+export const count = <T>(count_by: (_: T) => number, lst: T[]) => {
+  let c = 0
+  for (const ele of lst) {
+    c = c + count_by(ele)
+  }
+  return c
+}
+
 export const zip = <T, U>(lst_a: T[], lst_b: U[]) => {
   const len = Math.min(lst_a.length, lst_b.length)
   const zipped: [T, U][] = []
