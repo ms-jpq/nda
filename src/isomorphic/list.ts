@@ -37,13 +37,11 @@ export const filter = <T>(predicate: (_: T) => boolean, lst: T[]) =>
 export const reduce = <T, U>(trans: (_: U, __: T) => U, init: U, lst: T[]) =>
   lst.reduce(trans, init)
 
-export const count = <T>(count_by: (_: T) => number, lst: T[]) => {
-  let c = 0
-  for (const ele of lst) {
-    c = c + count_by(ele)
-  }
-  return c
-}
+export const count = <T>(predicate: (_: T) => number, lst: T[]) =>
+  reduce((a, e) => a + (predicate(e) ? 1 : 0), 0, lst)
+
+export const count_by = <T>(count: (_: T) => number, lst: T[]) =>
+  reduce((a, e) => a + count(e), 0, lst)
 
 export const zip = <T, U>(lst_a: T[], lst_b: U[]) => {
   const len = Math.min(lst_a.length, lst_b.length)
