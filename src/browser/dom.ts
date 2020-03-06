@@ -1,8 +1,12 @@
-export const $ = <E extends HTMLElement = HTMLElement>(selector: string) =>
-  (document.querySelector(selector) ?? undefined) as E | undefined
+export const $ = <E extends HTMLElement = HTMLElement>(
+  selector: string,
+  base = document.body,
+) => (base.querySelector(selector) ?? undefined) as E | undefined
 
-export const $$ = <E extends HTMLElement = HTMLElement>(selector: string) =>
-  [...document.querySelectorAll(selector)] as E[]
+export const $$ = <E extends HTMLElement = HTMLElement>(
+  selector: string,
+  base = document.body,
+) => [...base.querySelectorAll(selector)] as E[]
 
 export const wait_frame = () => new Promise<number>(requestAnimationFrame)
 
