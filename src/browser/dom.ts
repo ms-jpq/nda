@@ -1,10 +1,12 @@
-type E = HTMLElementTagNameMap & Record<string, HTMLElement>
+export const $ = <E extends HTMLElement = HTMLElement>(
+  selector: string,
+  base = document.body,
+) => (base.querySelector(selector) ?? undefined) as E | undefined
 
-export const $ = <T extends keyof E>(selector: string, base = document.body) =>
-  (base.querySelector(selector) ?? undefined) as E[T] | undefined
-
-export const $$ = <T extends keyof E>(selector: string, base = document.body) =>
-  [...base.querySelectorAll(selector)] as E[T][]
+export const $$ = <E extends HTMLElement = HTMLElement>(
+  selector: string,
+  base = document.body,
+) => [...base.querySelectorAll(selector)] as E[]
 
 export const wait_frame = () => new Promise<number>(requestAnimationFrame)
 
