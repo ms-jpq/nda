@@ -37,7 +37,7 @@ export const filter = <T>(predicate: (_: T) => boolean, lst: T[]) =>
 export const reduce = <T, U>(trans: (_: U, __: T) => U, init: U, lst: T[]) =>
   lst.reduce(trans, init)
 
-export const count = <T>(predicate: (_: T) => number, lst: T[]) =>
+export const count = <T>(predicate: (_: T) => boolean, lst: T[]) =>
   reduce((a, e) => a + (predicate(e) ? 1 : 0), 0, lst)
 
 export const count_by = <T>(count: (_: T) => number, lst: T[]) =>
