@@ -14,8 +14,8 @@ export const isdir = async (path: string) =>
 export const mkdir = (path: string) => fs.mkdir(path, { recursive: true })
 
 export const rm = async (path: string) => {
-  const ok = await exists(path)
-  if (ok) {
+  const exist = await exists(path)
+  if (!exist) {
     return
   }
   const stat = fs.lstat(path)
