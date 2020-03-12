@@ -10,6 +10,15 @@ export const $$ = <E extends HTMLElement = HTMLElement>(
 
 export const wait_frame = () => new Promise<number>(requestAnimationFrame)
 
+export const download = (name: string, uri: string) => {
+  const a = document.body.appendChild(document.createElement("a"))
+  a.target = "_blank"
+  a.download = name
+  a.href = uri
+  a.click()
+  a.remove()
+}
+
 export const img_loaded = (img: HTMLImageElement) => {
   const err = new Error(`img failed to load: ${img.src}`)
   const unsub = () => {
