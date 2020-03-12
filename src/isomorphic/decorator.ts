@@ -14,9 +14,8 @@ export const throttle = <F extends (...args: any[]) => any>(
   ms: number,
   fn: F,
 ) => {
+  let s: any = undefined
   let throttling = false
-
-  const unthrottle = () => (throttling = false)
 
   const throttled = (...args: Parameters<F>) => {
     if (throttling) {
@@ -27,10 +26,11 @@ export const throttle = <F extends (...args: any[]) => any>(
   }
 
   return (...args: Parameters<F>) => {
+    clearTimeout(s)
     if (throttling) {
-      setTimeout(throttled, ms, ...args)
+      s = setTimeout(throttled, ms, ...args)
     } else {
-      setTimeout(unthrottle, ms)
+      setTimeout(() => (throttling = false), ms)
       throttled(...args)
     }
   }
