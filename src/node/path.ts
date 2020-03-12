@@ -15,3 +15,5 @@ export const fn_ext = (path: string) => {
 export const join = p.join
 
 export const relative = p.relative
+
+export const resolve = p.resolve
