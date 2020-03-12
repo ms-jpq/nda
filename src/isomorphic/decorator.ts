@@ -32,8 +32,8 @@ export const throttle = <F extends (...args: any[]) => any>(
     if (throttling) {
       s = setTimeout(throttled, ms, ...args) as any
     } else {
-      throttled(...args)
       setTimeout(unthrottle, ms)
+      throttled(...args)
     }
   }
 }
