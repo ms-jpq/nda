@@ -17,11 +17,13 @@ export const ready = () =>
 
 export const wait_frame = () => new Promise<number>(requestAnimationFrame)
 
-export const download = (name: string, uri: string) => {
-  const a = document.body.appendChild(document.createElement("a"))
+export const download = (uri: string, name = "") => {
+  const a = document.createElement("a")
+  a.style.display = "none"
   a.target = "_blank"
   a.download = name
   a.href = uri
+  document.body.append(a)
   a.click()
   a.remove()
 }
