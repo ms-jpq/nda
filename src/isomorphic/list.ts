@@ -15,9 +15,6 @@ export const range = (begin: number, end: number, step = 1) => {
 export const enumerate = <T>(lst: T[]): [number, T][] =>
   lst.map((e, i) => [i, e])
 
-export const iter = <T>(side_effect: (_: T) => void, lst: T[]) =>
-  lst.forEach(side_effect)
-
 export const map = <T, U>(trans: (_: T) => U, lst: T[]) => lst.map(trans)
 
 export const flat_map = <T, U>(trans: (_: T) => U[], lst: T[]) =>
