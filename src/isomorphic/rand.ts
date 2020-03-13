@@ -1,12 +1,13 @@
 import { range } from "./list"
 
-export const float = (celi: number) => Math.random() * celi
+export const float = (floor: number, celi: number) =>
+  Math.random() * celi + floor
 
-export const int = (celi: number) =>
-  Math.floor(Math.random() * Math.floor(celi + 1))
+export const int = (floor: number, celi: number) =>
+  Math.floor(Math.random() * Math.floor(celi + 1)) + floor
 
 export const choice = <T>(pool: T[]): T | undefined =>
-  pool[int(pool.length - 1)]
+  pool[int(0, pool.length - 1)]
 
 export const choices = <T>(n: number, pool: T[]) => {
   const res = []
