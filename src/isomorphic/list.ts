@@ -52,6 +52,17 @@ export const zip = <T, U>(lst_a: T[], lst_b: U[]) => {
   return zipped
 }
 
+export const interlace = <T>(el: T, lst: T[]) => {
+  const interlaced = []
+  for (const [idx, ele] of enumerate(lst)) {
+    interlaced.push(ele)
+    if (idx !== lst.length - 1) {
+      interlaced.push(el)
+    }
+  }
+  return interlaced
+}
+
 export const find_by = <T>(predicate: (_: T) => boolean, lst: T[]) =>
   lst.find(predicate)
 
