@@ -1,7 +1,7 @@
 import { map } from "./list"
 
 export const of_list = <T>(elems: [string, any][]) => {
-  const obj = {}
+  const obj = Object.create(null)
   for (const [k, v] of elems) {
     obj[k] = v
   }

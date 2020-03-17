@@ -119,7 +119,7 @@ export const chunk = <T>(n: number, lst: T[]) => {
 
 export const join = <T>(sep: string, lst: T[]) => lst.join(sep)
 
-export const partition = <T, U extends keyof any>(
+export const group_by = <T, U extends keyof any>(
   key_by: (_: T) => U,
   lst: T[],
 ): Record<U, T[] | undefined> => {
