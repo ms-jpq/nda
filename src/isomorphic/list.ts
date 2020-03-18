@@ -43,6 +43,8 @@ export const count = <T>(predicate: (_: T) => boolean, lst: T[]) =>
 export const count_by = <T>(count: (_: T) => number, lst: T[]) =>
   reduce((a, e) => a + count(e), 0, lst)
 
+export const reverse = <T>(lst: T[]) => [...lst].reverse()
+
 export const zip = <T, U>(lst_a: T[], lst_b: U[]) => {
   const len = Math.min(lst_a.length, lst_b.length)
   const zipped: [T, U][] = []
