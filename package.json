@@ -26,7 +26,7 @@
     "url": "git+https://github.com/ms-jpq/nda.git"
   },
   "scripts": {
-    "postinstall": "../.bin/tsc",
+    "postinstall": "../.bin/tsc -p src",
     "pretty": "prettier --write **/**.tsx --write **/**.ts"
   },
   "version": "1.0.0"
