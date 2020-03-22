@@ -14,7 +14,8 @@
     "eslint-plugin-prettier": "*",
     "nodemon": "*",
     "parse-gitignore": "*",
-    "prettier": "*"
+    "prettier": "*",
+    "ts-node": "*"
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
