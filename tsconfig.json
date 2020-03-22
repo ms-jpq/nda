@@ -20,7 +20,7 @@
     "sourceMap": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "ES2019",
+    "target": "ES2015",
     "useDefineForClassFields": true
   },
   "exclude": ["**/node_modules/**", "test", "dist"],

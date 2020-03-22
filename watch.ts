@@ -3,7 +3,7 @@ import nodemon, { Settings } from "nodemon"
 //@ts-ignore
 import parse from "parse-gitignore"
 import { big_print } from "./src/node/console"
-import { join } from "./src/isomorphic/list"
+import { join } from "./src/isomorphic/iterator"
 import { slurp } from "./src/node/fs"
 
 const dist_dir = "./dist"

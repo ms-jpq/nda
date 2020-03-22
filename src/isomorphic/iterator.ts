@@ -1,6 +1,12 @@
+import { str } from "./prelude"
+
 export const range = function*(begin: number, end: number, step = 1) {
   let nxt = begin
-  while (nxt <= end) {
+  const cmp =
+    step > 0
+      ? (l: number, r: number) => l <= r
+      : (l: number, r: number) => l >= r
+  while (cmp(nxt, end)) {
     yield nxt
     nxt = nxt + step
   }
@@ -19,6 +25,22 @@ export const enumerate = function*<T>(
   for (const el of iterable) {
     yield [idx, el]
     idx += 1
+  }
+}
+
+export const take = function*<T>(n: number, iterable: Iterable<T>) {
+  for (const [idx, el] of enumerate(iterable)) {
+    if (idx < n) {
+      yield el
+    }
+  }
+}
+
+export const drop = function*<T>(n: number, iterable: Iterable<T>) {
+  for (const [idx, el] of enumerate(iterable)) {
+    if (idx >= n) {
+      yield el
+    }
   }
 }
 
@@ -91,35 +113,6 @@ export const find_by = <T>(
   return undefined
 }
 
-export const group_by = <T, U extends keyof any>(
-  key_by: (_: T) => U,
-  iterable: Iterable<T>,
-) => {
-  const res = new Map<U, T[] | undefined>()
-  for (const el of iterable) {
-    const key = key_by(el)
-    if (!res.has(key)) {
-      res.set(key, [])
-    }
-    res.get(key)!.push(el)
-  }
-  return res
-}
-
-export const unique_by = function*<T>(
-  key_by: (_: T) => any,
-  iterable: Iterable<T>,
-) {
-  const set = new Set()
-  for (const el of iterable) {
-    const key = key_by(el)
-    if (!set.has(key)) {
-      yield el
-    }
-    set.add(key)
-  }
-}
-
 export const zip = function*<T, U>(
   { [Symbol.iterator]: gen1 }: Iterable<T>,
   { [Symbol.iterator]: gen2 }: Iterable<U>,
@@ -168,18 +161,60 @@ export const all = function*<T>(
   return acc
 }
 
-export const take = function*<T>(n: number, iterable: Iterable<T>) {
-  for (const [idx, el] of enumerate(iterable)) {
-    if (idx < n) {
+export const group_by = <T, U extends keyof any>(
+  key_by: (_: T) => U,
+  iterable: Iterable<T>,
+) => {
+  const res = new Map<U, T[] | undefined>()
+  for (const el of iterable) {
+    const key = key_by(el)
+    if (!res.has(key)) {
+      res.set(key, [])
+    }
+    res.get(key)!.push(el)
+  }
+  return res
+}
+
+export const sort_by = <T>(key_by: (_: T) => number, iterable: Iterable<T>) => {
+  const sort = (a: T, b: T) => key_by(a) - key_by(b)
+  return [...iterable].sort(sort)
+}
+
+export const sort_by_keys = <T>(
+  keys_by: (_: T) => number[],
+  iterable: Iterable<T>,
+) => {
+  const sort = (a: T, b: T) => {
+    const zipped = zip(keys_by(a), keys_by(b))
+    for (const [lhs, rhs] of zipped) {
+      if (lhs !== rhs) {
+        return lhs - rhs
+      }
+    }
+    return 0
+  }
+  return [...iterable].sort(sort)
+}
+
+export const unique_by = function*<T>(
+  key_by: (_: T) => any,
+  iterable: Iterable<T>,
+) {
+  const set = new Set()
+  for (const el of iterable) {
+    const key = key_by(el)
+    if (!set.has(key)) {
       yield el
     }
+    set.add(key)
   }
 }
 
-export const drop = function*<T>(n: number, iterable: Iterable<T>) {
-  for (const [idx, el] of enumerate(iterable)) {
-    if (idx >= n) {
-      yield el
-    }
+export const join = <T>(sep: string, iterable: Iterable<T>) => {
+  let s = ""
+  for (const el of interlace(sep, map(str, iterable))) {
+    s += el
   }
+  return s
 }

@@ -1,4 +1,4 @@
-import { join } from "./list"
+import { join } from "./iterator"
 
 export const cn = (...classes: (string | Record<string, boolean>)[]) => {
   const classlist = []
