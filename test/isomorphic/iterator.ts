@@ -1,5 +1,11 @@
 import assert from "assert"
-import { sort_by_keys, range, drop, take } from "../../src/isomorphic/iterator"
+import {
+  drop,
+  interlace,
+  range,
+  sort_by_keys,
+  take,
+} from "../../src/isomorphic/iterator"
 
 const drop_1 = () => {
   const lst = [...drop(5, range(1, 10))]
@@ -9,6 +15,11 @@ const drop_1 = () => {
 const take_1 = () => {
   const lst = [...take(5, range(1, 10))]
   assert(lst.length === 5)
+}
+
+const interlace_1 = () => {
+  const lst = [...interlace(0, range(1, 5))]
+  assert(lst.length === 9)
 }
 
 const sort_by_keys_1 = () => {
@@ -24,5 +35,6 @@ const sort_by_keys_1 = () => {
 export const run_iterator = async () => {
   drop_1()
   take_1()
+  interlace_1()
   sort_by_keys_1()
 }

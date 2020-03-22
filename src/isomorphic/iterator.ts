@@ -55,9 +55,7 @@ export const flat_map = function*<T, U>(
   iterable: Iterable<T>,
 ) {
   for (const el of iterable) {
-    for (const e of trans(el)) {
-      yield e
-    }
+    yield* trans(el)
   }
 }
 
