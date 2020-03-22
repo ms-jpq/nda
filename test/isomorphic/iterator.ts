@@ -27,6 +27,14 @@ const chunk_2 = () => {
   assert(lst[1].length === 3)
 }
 
+const chunk_3 = () => {
+  const long = range(1, 2)
+  const lst = [...chunk(3, long)]
+
+  assert(lst.length === 1)
+  assert(lst[0].length === 2)
+}
+
 const drop_1 = () => {
   const lst = [...drop(5, range(1, 10))]
 
@@ -57,6 +65,7 @@ const sort_by_keys_1 = () => {
 export const run_iterator = async () => {
   chunk_1()
   chunk_2()
+  chunk_3()
   drop_1()
   take_1()
   interlace_1()
