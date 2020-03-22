@@ -51,7 +51,7 @@ export const map = function*<T, U>(trans: (_: T) => U, iterable: Iterable<T>) {
 }
 
 export const flat_map = function*<T, U>(
-  trans: (_: T) => U[],
+  trans: (_: T) => Iterable<U>,
   iterable: Iterable<T>,
 ) {
   for (const el of iterable) {
@@ -190,6 +190,20 @@ export const sort_by_keys = <T>(
     return 0
   }
   return [...iterable].sort(sort)
+}
+
+export const unique_by = function*<T, U>(
+  key_by: (_: T) => U,
+  iterable: Iterable<T>,
+) {
+  const set = new Set<U>()
+  for (const el of iterable) {
+    const key = key_by(el)
+    if (!set.has(key)) {
+      yield el
+    }
+    set.add(key)
+  }
 }
 
 export const chunk = function*<T>(size: number, iterable: Iterable<T>) {

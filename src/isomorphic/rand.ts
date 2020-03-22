@@ -8,11 +8,11 @@ export const choice = <T>(pool: T[]): T | undefined =>
   pool[int(0, pool.length - 1)]
 
 // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-export const shuffle = <T>(pool: T[]) => {
-  const res = [...pool]
-  for (let i = res.length - 1; i > 0; i--) {
+export const shuffle = <T>(pool: Iterable<T>) => {
+  const coll = [...pool]
+  for (let i = coll.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[res[i], res[j]] = [res[j], res[i]]
+    ;[coll[i], coll[j]] = [coll[j], coll[i]]
   }
-  return res
+  return coll
 }
