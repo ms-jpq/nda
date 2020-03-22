@@ -142,10 +142,7 @@ export const interlace = function*<T>(e: T, iterable: Iterable<T>) {
   }
 }
 
-export const any = function*<T>(
-  predicate: (_: T) => boolean,
-  iterable: Iterable<T>,
-) {
+export const any = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
   let acc = false
   for (const el of iterable) {
     acc = acc || predicate(el)
@@ -153,10 +150,7 @@ export const any = function*<T>(
   return acc
 }
 
-export const all = function*<T>(
-  predicate: (_: T) => boolean,
-  iterable: Iterable<T>,
-) {
+export const all = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
   let acc = true
   for (const el of iterable) {
     acc = acc && predicate(el)
