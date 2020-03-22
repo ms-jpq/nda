@@ -1,8 +1,8 @@
-import { map } from "./list"
+import { map } from "./iterator"
 
-export const of_list = <T>(elems: [string, any][]) => {
+export const of_list = <T>(iterator: Iterable<[string, any]>) => {
   const obj = Object.create(null)
-  for (const [k, v] of elems) {
+  for (const [k, v] of iterator) {
     obj[k] = v
   }
   return obj as T
@@ -14,12 +14,11 @@ export const is_array = (thing: any) => thing && constructor(thing) === Array
 
 export const reconciliate = <T>(lhs: any, rhs: any, replace = false): T => {
   if (is_object(lhs) && is_object(rhs)) {
-    const append = of_list<any>(
-      map(
-        ([k, v]) => [k, reconciliate(lhs[k], v, replace)],
-        Object.entries(rhs),
-      ),
+    const gen = map(
+      ([k, v]) => [k, reconciliate(lhs[k], v, replace)] as [string, T],
+      Object.entries(rhs),
     )
+    const append = of_list<any>(gen)
     return { ...lhs, ...append }
   }
   if (is_array(lhs) && is_array(rhs)) {

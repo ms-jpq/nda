@@ -1,0 +1,185 @@
+export const range = function*(begin: number, end: number, step = 1) {
+  let nxt = begin
+  while (nxt <= end) {
+    yield nxt
+    nxt = nxt + step
+  }
+}
+
+export const generate = function*<T>(gen: () => T, n: number) {
+  for (const _ of range(1, n)) {
+    yield gen()
+  }
+}
+
+export const enumerate = function*<T>(
+  iterable: Iterable<T>,
+): Generator<[number, T]> {
+  let idx = 0
+  for (const el of iterable) {
+    yield [idx, el]
+    idx += 1
+  }
+}
+
+export const map = function*<T, U>(trans: (_: T) => U, iterable: Iterable<T>) {
+  for (const el of iterable) {
+    yield trans(el)
+  }
+}
+
+export const flat_map = function*<T, U>(
+  trans: (_: T) => U[],
+  iterable: Iterable<T>,
+) {
+  for (const el of iterable) {
+    for (const e of trans(el)) {
+      yield e
+    }
+  }
+}
+
+export const compact_map = function*<T, U>(
+  trans: (_: T) => U | undefined,
+  iterable: Iterable<T>,
+) {
+  for (const el of iterable) {
+    const nxt = trans(el)
+    if (nxt !== undefined) {
+      yield nxt
+    }
+  }
+}
+
+export const filter = function*<T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+) {
+  for (const el of iterable) {
+    if (predicate(el)) {
+      yield el
+    }
+  }
+}
+
+export const reduce = <T, U>(
+  trans: (_: U, __: T) => U,
+  init: U,
+  iterable: Iterable<T>,
+) => {
+  let acc = init
+  for (const el of iterable) {
+    acc = trans(acc, el)
+  }
+  return acc
+}
+
+export const count_by = <T>(
+  predicate: (_: T) => boolean | number,
+  iterable: Iterable<T>,
+) => reduce((a, e) => a + (predicate(e) as number), 0, iterable)
+
+export const find_by = <T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+) => {
+  for (const el of iterable) {
+    if (predicate(el)) {
+      return el
+    }
+  }
+  return undefined
+}
+
+export const group_by = <T, U extends keyof any>(
+  key_by: (_: T) => U,
+  iterable: Iterable<T>,
+) => {
+  const res = new Map<U, T[] | undefined>()
+  for (const el of iterable) {
+    const key = key_by(el)
+    if (!res.has(key)) {
+      res.set(key, [])
+    }
+    res.get(key)!.push(el)
+  }
+  return res
+}
+
+export const unique_by = function*<T>(
+  key_by: (_: T) => any,
+  iterable: Iterable<T>,
+) {
+  const set = new Set()
+  for (const el of iterable) {
+    const key = key_by(el)
+    if (!set.has(key)) {
+      yield el
+    }
+    set.add(key)
+  }
+}
+
+export const zip = function*<T, U>(
+  { [Symbol.iterator]: gen1 }: Iterable<T>,
+  { [Symbol.iterator]: gen2 }: Iterable<U>,
+): Generator<[T, U]> {
+  const [iter1, iter2] = [gen1(), gen2()]
+  while (true) {
+    const [r1, r2] = [iter1.next(), iter2.next()]
+    if (r1.done || r2.done) {
+      break
+    } else {
+      yield [r1.value, r2.value]
+    }
+  }
+}
+
+export const interlace = function*<T>(e: T, iterable: Iterable<T>) {
+  let fst = true
+  for (const el of iterable) {
+    if (!fst) {
+      yield e
+    }
+    yield el
+    fst = false
+  }
+}
+
+export const any = function*<T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+) {
+  let acc = false
+  for (const el of iterable) {
+    acc = acc || predicate(el)
+  }
+  return acc
+}
+
+export const all = function*<T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+) {
+  let acc = true
+  for (const el of iterable) {
+    acc = acc && predicate(el)
+  }
+  return acc
+}
+
+export const take = function*<T>(n: number, iterable: Iterable<T>) {
+  for (const [idx, el] of enumerate(iterable)) {
+    if (idx < n) {
+      yield el
+    }
+  }
+}
+
+export const drop = function*<T>(n: number, iterable: Iterable<T>) {
+  for (const [idx, el] of enumerate(iterable)) {
+    if (idx >= n) {
+      yield el
+    }
+  }
+}

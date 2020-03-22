@@ -1,6 +1,6 @@
 import { dirname, join, relative } from "./path"
 import { exists as exists_cb, promises as fs } from "fs"
-import { flat_map, group_by, map } from "../isomorphic/list"
+import { flat_map, group_by, map } from "../isomorphic/iterator"
 
 export const exists = (path: string) =>
   new Promise<boolean>((resolve) => exists_cb(path, resolve))
@@ -61,8 +61,8 @@ export const readdir = async (
   const info = await fs.readdir(path, { withFileTypes: true })
   const records = group_by((c) => (c.isDirectory() ? "dirs" : "files"), info)
 
-  const _files = map((f) => join(path, f.name), records.files ?? [])
-  const _dirs = map((d) => join(path, d.name), records.dirs ?? [])
+  const _files = map((f) => join(path, f.name), records.get("files") ?? [])
+  const _dirs = map((d) => join(path, d.name), records.get("dirs") ?? [])
 
   const contents = await Promise.all(map((d) => readdir(level - 1, d), _dirs))
   const files = [..._files, ...flat_map((c) => c.files, contents)]

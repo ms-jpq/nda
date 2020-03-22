@@ -15,13 +15,18 @@ export const future = <T>() => {
 export const sleep = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms))
 
-export const counter = () => ((i) => () => (i += 1))(0)
+export const counter = function*() {
+  let i = 0
+  while (true) {
+    yield (i += 1)
+  }
+}
 
-export const timer = () => {
+export const timer = function*() {
   let prev = performance.now()
-  return () => {
-    const temp = prev
-    const next = (prev = performance.now())
-    return next - temp
+  while (true) {
+    const next = performance.now()
+    yield next - prev
+    prev = next
   }
 }
