@@ -192,18 +192,16 @@ export const sort_by_keys = <T>(
   return [...iterable].sort(sort)
 }
 
-export const unique_by = function*<T>(
-  key_by: (_: T) => any,
-  iterable: Iterable<T>,
-) {
-  const set = new Set()
-  for (const el of iterable) {
-    const key = key_by(el)
-    if (!set.has(key)) {
-      yield el
+export const chunk = function*<T>(size: number, iterable: Iterable<T>) {
+  let coll: T[] = []
+  for (const [idx, el] of enumerate(iterable)) {
+    if (idx % size === 0 && idx !== 0) {
+      yield coll
+      coll = []
     }
-    set.add(key)
+    coll.push(el)
   }
+  yield coll
 }
 
 export const join = <T>(sep: string, iterable: Iterable<T>) => {

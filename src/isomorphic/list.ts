@@ -19,13 +19,3 @@ export const unique_by = <T>(key_by: (_: T) => any, lst: T[]) => {
   return unique
 }
 
-export const chunk = <T>(n: number, lst: T[]) => {
-  const res: T[][] = []
-  for (const [idx, ele] of enumerate(lst)) {
-    if (idx % n === 0) {
-      res.push([])
-    }
-    last(res)!.push(ele)
-  }
-  return res
-}
