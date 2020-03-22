@@ -114,10 +114,13 @@ export const find_by = <T>(
 }
 
 export const zip = function*<T, U>(
-  { [Symbol.iterator]: gen1 }: Iterable<T>,
-  { [Symbol.iterator]: gen2 }: Iterable<U>,
+  iterable1: Iterable<T>,
+  iterable2: Iterable<U>,
 ): Generator<[T, U]> {
-  const [iter1, iter2] = [gen1(), gen2()]
+  const [iter1, iter2] = [
+    iterable1[Symbol.iterator](),
+    iterable2[Symbol.iterator](),
+  ]
   while (true) {
     const [r1, r2] = [iter1.next(), iter2.next()]
     if (r1.done || r2.done) {
