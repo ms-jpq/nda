@@ -111,6 +111,15 @@ export const find_by = <T>(
   return undefined
 }
 
+export const has = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
+  for (const el of iterable) {
+    if (predicate(el)) {
+      return true
+    }
+  }
+  return false
+}
+
 export const zip = function*<T, U>(
   iterable1: Iterable<T>,
   iterable2: Iterable<U>,
