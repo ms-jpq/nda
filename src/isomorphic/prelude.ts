@@ -25,3 +25,11 @@ export const timer = () => {
     return next - temp
   }
 }
+
+export const tiktok = async function*(ms: number) {
+  const inc = counter()
+  while (true) {
+    yield inc()
+    await sleep(ms)
+  }
+}

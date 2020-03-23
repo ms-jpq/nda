@@ -17,6 +17,13 @@ export const ready = () =>
 
 export const wait_frame = () => new Promise<number>(requestAnimationFrame)
 
+export const animation_loop = async function*() {
+  while (true) {
+    const elapsed = await wait_frame()
+    yield elapsed
+  }
+}
+
 export const download = (uri: string, name = "") => {
   const a = document.createElement("a")
   a.style.display = "none"

@@ -36,7 +36,7 @@ const t2 = () => {
 
   let max = -Infinity
   let len = 0
-  for (const [l, val] of enumerate(take_n(100, heap))) {
+  for (const [l, val] of enumerate(take_n(Infinity, heap))) {
     assert(val !== undefined)
     assert(val >= max)
     max = Math.max(val, max)

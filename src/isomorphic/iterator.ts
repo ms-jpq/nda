@@ -30,9 +30,10 @@ export const enumerate = function*<T>(
 
 export const take = function*<T>(n: number, iterable: Iterable<T>) {
   for (const [idx, el] of enumerate(iterable)) {
-    if (idx < n) {
-      yield el
+    if (idx >= n) {
+      break
     }
+    yield el
   }
 }
 

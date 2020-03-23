@@ -41,8 +41,21 @@ const drop_1 = () => {
   assert(lst.length === 5)
 }
 
+const drop_2 = () => {
+  const lst = [...take(5, drop(5, range(1, Infinity)))]
+
+  assert(lst.length === 5)
+  assert(lst[0] === 6)
+}
+
 const take_1 = () => {
   const lst = [...take(5, range(1, 10))]
+
+  assert(lst.length === 5)
+}
+
+const take_2 = () => {
+  const lst = [...take(5, range(1, Infinity))]
 
   assert(lst.length === 5)
 }
@@ -67,7 +80,9 @@ export const run_iterator = async () => {
   chunk_2()
   chunk_3()
   drop_1()
+  drop_2()
   take_1()
+  take_2()
   interlace_1()
   sort_by_keys_1()
 }

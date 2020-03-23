@@ -64,10 +64,10 @@ export const put = <T>(key: number, val: T, heap: Heap<T>) => {
 
 export const take_n = function*<T>(n: number, heap: Heap<T>) {
   for (const _ of range(1, n)) {
-    const val = take(heap)
-    if (val !== undefined) {
-      yield val
+    if (heap.length === 0) {
+      break
     }
+    yield take(heap)
   }
 }
 

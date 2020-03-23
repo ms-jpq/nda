@@ -35,8 +35,8 @@ export const pipe = async ({ cmd, args, stdin }: PipeArgs) => {
   if (stdin !== undefined) {
     await new Promise((resolve, reject) => {
       stream.stdin.write(stdin, (err) => (err ? reject(err) : resolve()))
-      stream.stdin.end()
     })
+    stream.stdin.end()
   }
 
   await done

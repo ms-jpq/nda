@@ -30,19 +30,19 @@ const t2 = () => {
   const c2 = q.take_n(10)
 
   const tot = [...c1, ...c2]
-  assert(all(([p, e]) => p === e, zip(tot, range(1, 15))))
+  assert(all(([p, e]) => p === e, zip(tot, range(1, Infinity))))
 }
 
 const t3 = () => {
   const q = queue<number>()
 
-  q.put_n(range(1, 10))
-  const c1 = q.take_n(10)
-  q.put_n(range(11, 15))
-  const c2 = q.take_n(5)
+  q.put_n(range(1, 3))
+  const c1 = q.take_n(2)
+  q.put_n(range(4, 9))
+  const c2 = q.take_n(10)
 
   const tot = [...c1, ...c2]
-  assert(all(([p, e]) => p === e, zip(tot, range(1, 15))))
+  assert(all(([p, e]) => p === e, zip(tot, range(1, Infinity))))
 }
 
 export const run_queue = async () => {
