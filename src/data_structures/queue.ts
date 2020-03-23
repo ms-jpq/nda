@@ -2,6 +2,8 @@ import { range } from "../isomorphic/iterator"
 
 const inc = (i: number, len: number) => (i + 1) % len
 
+const dec = (i: number, len: number) => (i - 1 + len) % len
+
 export const queue = <T>() => {
   const buf: (T | undefined)[] = []
   buf.length = 2
@@ -10,15 +12,19 @@ export const queue = <T>() => {
 
   const len = () => c
 
+  const size_down = () => {
+    console.log()
+  }
+
   const size_up = () => {
     buf.length *= 2
-    const d = (h + c) % c
-    for (const i of range(1, d)) {
-      t = inc(t, c)
-      const j = inc(h + i, buf.length)
-      ;[buf[t], buf[j]] = [buf[j], buf[t]]
+    for (const i of range(c - 1, 0, -1)) {
+      h = dec(h, c)
+      const j = c + i
+      ;[buf[h], buf[j]] = [buf[j], buf[h]]
     }
-    h += c
+    h = 0
+    t = c
   }
 
   const take = (): T | undefined => {
@@ -29,6 +35,9 @@ export const queue = <T>() => {
     buf[t] = undefined
     c -= 1
     t = inc(t, buf.length)
+    if (buf.length / 4 === c) {
+      size_down()
+    }
     return val
   }
 
