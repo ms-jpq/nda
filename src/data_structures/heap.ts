@@ -1,61 +1,69 @@
-// Priority Queue
-export const heap = <T>(key_by: (_: T) => number) => {
-  const coll: { val: T; key: number }[] = []
+const heap_key = Symbol.for("_heap_")
 
-  const parent = (i: number) => Math.floor((i - 1) / 2)
-  const left = (i: number) => i * 2 + 1
-  const right = (i: number) => i * 2 + 2
+export type Heap<T> = (T & { [heap_key]: number })[]
 
-  // Min goes down
-  const swap_down = () => {
-    let i = 0
-    while (true) {
-      const [l, r] = [left(i), right(i)]
-      // IF coll[l] === undefined -> Go Left
-      const big = coll[l]?.val < coll[r]?.val ? r : l
-      if (coll[i]?.val < coll[big]?.val) {
-        ;[coll[i], coll[big]] = [coll[big], coll[i]]
-        i = big
-      } else {
-        break
-      }
+const parent = (i: number) => Math.floor((i - 1) / 2)
+
+const left = (i: number) => i * 2 + 1
+
+const right = (i: number) => i * 2 + 2
+
+// Max goes down
+const swap_down = <T>(heap: Heap<T>) => {
+  const len = heap.length
+  let i = 0
+  let [l, r] = [left(i), right(i)]
+  while (l < len) {
+    const smol = r >= len ? l : heap[l][heap_key] < heap[r][heap_key] ? l : r
+
+    if (heap[i][heap_key] > heap[smol][heap_key]) {
+      ;[heap[i], heap[smol]] = [heap[smol], heap[i]]
+      i = smol
+      ;[l, r] = [left(i), right(i)]
+    } else {
+      break
     }
   }
+}
 
-  // Max goes up
-  const swap_up = () => {
-    let i = coll.length - 1
-    while (true) {
-      const p = parent(i)
-      if (coll[i]?.val > coll[p]?.val) {
-        ;[coll[i], coll[p]] = [coll[p], coll[i]]
-        i = p
-      } else {
-        break
-      }
+// Min goes up
+const swap_up = <T>(heap: Heap<T>) => {
+  let i = heap.length - 1
+  let p = parent(i)
+  while (p >= 0) {
+    if (heap[i][heap_key] < heap[p][heap_key]) {
+      ;[heap[i], heap[p]] = [heap[p], heap[i]]
+      i = p
+      p = parent(i)
+    } else {
+      break
     }
   }
+}
 
-  const peak = (): T | undefined => coll[0]?.val
+export const peak = <T>(heap: Heap<T>): T | undefined => heap[0]
 
-  const take = (): T | undefined => {
-    const val = coll[0]?.val
-    const last = coll.pop()
-    if (coll.length > 0 && last) {
-      coll[0] = last
-    }
-    swap_down()
-    return val
+export const take = <T>(heap: Heap<T>): T | undefined => {
+  if (heap.length === 0) {
+    return undefined
   }
+  const val = heap[0]
+  const idx = heap.length - 1
+  heap[0] = heap[idx]
+  heap.length = idx
+  swap_down(heap)
+  return val
+}
 
-  const put = (val: T) => {
-    coll.push({ val, key: key_by(val) })
-    swap_up()
-  }
+export const put = <T>(key: number, val: T, heap: Heap<T>) => {
+  heap.push(Object.assign(val, { [heap_key]: key }))
+  swap_up(heap)
+}
 
-  return {
-    peak,
-    take,
-    put,
+export const heapify = <T>(key_by: (_: T) => number, iterable: Iterable<T>) => {
+  const heap: Heap<T> = []
+  for (const el of iterable) {
+    heap.push(Object.assign(el, { [heap_key]: key_by(el) }))
   }
+  return heap
 }
