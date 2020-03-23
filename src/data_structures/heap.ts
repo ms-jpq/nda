@@ -1,3 +1,5 @@
+import { range } from "../isomorphic/iterator"
+
 const heap_key = Symbol.for("_heap_")
 
 export type Heap<T> = (T & { [heap_key]: number })[]
@@ -60,10 +62,17 @@ export const put = <T>(key: number, val: T, heap: Heap<T>) => {
   swap_up(heap)
 }
 
-export const heapify = <T>(key_by: (_: T) => number, iterable: Iterable<T>) => {
-  const heap: Heap<T> = []
-  for (const el of iterable) {
-    heap.push(Object.assign(el, { [heap_key]: key_by(el) }))
+export const take_n = function*<T>(n: number, heap: Heap<T>) {
+  for (const _ of range(1, n)) {
+    const val = take(heap)
+    if (val !== undefined) {
+      yield val
+    }
   }
-  return heap
+}
+
+export const put_n = <T>(iterable: Iterable<[number, T]>, heap: Heap<T>) => {
+  for (const [key, val] of iterable) {
+    put(key, val, heap)
+  }
 }
