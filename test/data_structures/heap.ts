@@ -1,7 +1,14 @@
 import { assert } from "../../src/isomorphic/assertion"
-import { generate, map, enumerate } from "../../src/isomorphic/iterator"
-import { Heap, put, put_n, take, take_n } from "../../src/data_structures/heap"
+import { enumerate, generate } from "../../src/isomorphic/iterator"
+import { id } from "../../src/isomorphic/prelude"
 import { int } from "../../src/isomorphic/rand"
+import {
+  Heap,
+  put,
+  heapify,
+  take,
+  take_n,
+} from "../../src/data_structures/heap"
 
 const t1 = () => {
   const heap: Heap<number> = []
@@ -20,13 +27,10 @@ const t1 = () => {
 }
 
 const t2 = () => {
-  const pool = map(
-    (el) => [el, el] as [number, number],
+  const heap: Heap<number> = heapify(
+    id,
     generate(() => int(1, 50), 50),
   )
-
-  const heap: Heap<number> = []
-  put_n(pool, heap)
 
   assert(heap.length === 50)
 

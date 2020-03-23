@@ -76,3 +76,11 @@ export const put_n = <T>(iterable: Iterable<[number, T]>, heap: Heap<T>) => {
     put(key, val, heap)
   }
 }
+
+export const heapify = <T>(key_by: (_: T) => number, iterable: Iterable<T>) => {
+  const heap: Heap<T> = []
+  for (const el of iterable) {
+    put(key_by(el), el, heap)
+  }
+  return heap
+}
