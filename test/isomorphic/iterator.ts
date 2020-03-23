@@ -8,6 +8,18 @@ import {
   take,
 } from "../../src/isomorphic/iterator"
 
+const range_1 = () => {
+  const coll = [...range(0, 1)]
+
+  assert(coll.length === 2)
+}
+
+const range_2 = () => {
+  const coll = [...range(0, 0)]
+
+  assert(coll.length === 1)
+}
+
 const chunk_1 = () => {
   const long = range(1, 7)
   const lst = [...chunk(3, long)]
@@ -76,6 +88,8 @@ const sort_by_keys_1 = () => {
 }
 
 export const run_iterator = async () => {
+  range_1()
+  range_2()
   chunk_1()
   chunk_2()
   chunk_3()

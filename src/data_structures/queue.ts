@@ -1,20 +1,18 @@
 import { range } from "../isomorphic/iterator"
 
+const MIN_SIZE = 8
+
 const inc = (i: number, len: number) => (i + 1) % len
 
 const dec = (i: number, len: number) => (i - 1 + len) % len
 
 export const queue = <T>() => {
   const buf: (T | undefined)[] = []
-  buf.length = 2
+  buf.length = MIN_SIZE
 
   let [h, t, c] = [0, 0, 0]
 
   const len = () => c
-
-  const size_down = () => {
-    console.log()
-  }
 
   const size_up = () => {
     buf.length *= 2
@@ -35,9 +33,6 @@ export const queue = <T>() => {
     buf[t] = undefined
     c -= 1
     t = inc(t, buf.length)
-    if (buf.length / 4 === c) {
-      size_down()
-    }
     return val
   }
 

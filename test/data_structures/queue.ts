@@ -7,7 +7,7 @@ const t1 = () => {
 
   const pool = [...range(1, 5)]
 
-  for (const i of range(1, 25)) {
+  for (const _ of range(1, 25)) {
     for (const n of pool) {
       q.put(n)
     }
