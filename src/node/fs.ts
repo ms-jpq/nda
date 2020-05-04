@@ -79,14 +79,17 @@ export const cp = async (src: string, dest: string) => {
   } else if (stat.isDirectory()) {
     const info = await readdir(Infinity, src)
 
-    const dest_dirs = map((d) => join(dest, relative(src, d)), info.dirs)
     const dest_files = map(
       (f) => ({ s: f, d: join(dest, relative(src, f)) }),
       info.files,
     )
 
-    await Promise.all([mkdir(dest), ...map(mkdir, dest_dirs)])
-    await Promise.all(map((f) => fs.copyFile(f.s, f.d), dest_files))
+    await Promise.all(
+      map(async (f) => {
+        await mkdir(dirname(f.d))
+        fs.copyFile(f.s, f.d)
+      }, dest_files),
+    )
   } else {
     throw new Error(`Not dir or file :: ${src}`)
   }
