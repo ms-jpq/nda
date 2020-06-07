@@ -1,15 +1,20 @@
 import assert from "assert"
-import { execFile, spawn, ExecFileOptions } from "child_process"
+import { execFile, spawn, ChildProcess, ExecFileOptions } from "child_process"
 
 export const run = (opts: ExecFileOptions, cmd: string, ...args: string[]) =>
   new Promise<{
+    code: number
     stdout: string
     stderr: string
-  }>((resolve, reject) =>
-    execFile(cmd, args, opts, (err, stdout, stderr) =>
-      err ? reject(err) : resolve({ stdout, stderr }),
-    ),
-  )
+  }>((resolve, reject) => {
+    const child: ChildProcess = execFile(
+      cmd,
+      args,
+      opts,
+      (err, stdout, stderr) =>
+        err ? reject(err) : resolve({ code: child.exitCode!, stdout, stderr }),
+    )
+  })
 
 export type PipeArgs = {
   cmd: string
