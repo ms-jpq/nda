@@ -1,7 +1,15 @@
 import assert from "assert"
-import { execFile, spawn, ChildProcess, ExecFileOptions } from "child_process"
+import {
+  execFile,
+  spawn,
+  ChildProcess,
+  ExecFileOptions,
+  SpawnOptions,
+  SpawnOptionsWithoutStdio,
+  SpawnOptionsWithStdioTuple,
+} from "child_process"
 
-export const run = (opts: ExecFileOptions, cmd: string, ...args: string[]) =>
+export const run = (cmd: string, args: string[], opts: ExecFileOptions = {}) =>
   new Promise<{
     code: number
     stdout: string
@@ -16,15 +24,37 @@ export const run = (opts: ExecFileOptions, cmd: string, ...args: string[]) =>
     )
   })
 
-export type PipeArgs = {
+export type SpawnArgs = {
   cmd: string
   args: string[]
   stdin?: any
+  opts?: SpawnOptions
 }
 
-export const pipe = async ({ cmd, args, stdin }: PipeArgs) => {
-  const stream = spawn(cmd, args)
-  const done = new Promise((resolve) => stream.once("close", resolve))
+export const call = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
+  const options: SpawnOptionsWithStdioTuple<"pipe", "inherit", "inherit"> = {
+    ...opts,
+    stdio: ["pipe", "inherit", "inherit"],
+  }
+
+  const stream = spawn(cmd, args, options)
+  const done = new Promise((resolve) => stream.once("exit", resolve))
+
+  if (stdin !== undefined) {
+    await new Promise((resolve, reject) => {
+      stream.stdin.write(stdin, (err) => (err ? reject(err) : resolve()))
+    })
+    stream.stdin.end()
+  }
+
+  await done
+  return stream.exitCode!
+}
+
+export const pipe = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
+  const options: SpawnOptionsWithoutStdio = { ...opts, stdio: "pipe" }
+  const stream = spawn(cmd, args, options)
+  const done = new Promise((resolve) => stream.once("exit", resolve))
 
   const out_buf: any = []
   const err_buf: any = []
@@ -46,5 +76,5 @@ export const pipe = async ({ cmd, args, stdin }: PipeArgs) => {
 
   await done
   assert(stdout !== undefined && stderr !== undefined)
-  return [stdout!, stderr!]
+  return { code: stream.exitCode!, stdout, stderr }
 }
