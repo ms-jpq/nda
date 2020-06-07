@@ -38,7 +38,10 @@ export const call = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
   }
 
   const stream = spawn(cmd, args, options)
-  const done = new Promise((resolve) => stream.once("close", resolve))
+  const done = Promise.all([
+    new Promise((resolve) => stream.once("exit", resolve)),
+    new Promise((resolve) => stream.once("close", resolve))
+  ])
 
   if (stdin !== undefined) {
     await new Promise((resolve, reject) => {
@@ -54,7 +57,10 @@ export const call = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
 export const pipe = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
   const options: SpawnOptionsWithoutStdio = { ...opts, stdio: "pipe" }
   const stream = spawn(cmd, args, options)
-  const done = new Promise((resolve) => stream.once("close", resolve))
+  const done = Promise.all([
+    new Promise((resolve) => stream.once("exit", resolve)),
+    new Promise((resolve) => stream.once("close", resolve))
+  ])
 
   const out_buf: any = []
   const err_buf: any = []
