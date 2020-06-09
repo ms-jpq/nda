@@ -81,6 +81,6 @@ export const pipe = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
   }
 
   await done
-  assert(stdout !== undefined && stderr !== undefined)
-  return { code: stream.exitCode!, stdout, stderr }
+  return { code: stream.exitCode!, stdout: stdout!, stderr: stderr! }
 }
+
