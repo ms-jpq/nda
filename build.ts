@@ -2,7 +2,7 @@
 
 import { call } from "./src/node/sub_process"
 
-const main= async () => {
+const main = async () => {
   process.chdir(__dirname)
   await call({
     cmd: "tsc",
