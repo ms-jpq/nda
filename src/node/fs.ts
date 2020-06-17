@@ -1,4 +1,4 @@
-import { dirname, join, relative } from "./path"
+import { dirname, join, relative } from "path"
 import { exists as exists_cb, promises as fs } from "fs"
 import { flat_map, group_by, map } from "../isomorphic/iterator"
 
@@ -94,3 +94,4 @@ export const cp = async (src: string, dest: string) => {
     throw new Error(`Not dir or file :: ${src}`)
   }
 }
+
