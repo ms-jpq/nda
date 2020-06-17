@@ -23,6 +23,6 @@ jobs:
       - name: Install Packages
         run: npm install
 
-      - name: Build Page
+      - name: Build
         run: npm run build
 
