@@ -2,5 +2,7 @@
 
 import { spawnSync } from "child_process"
 
-spawnSync("tsc", ["-p", "src"], { stdio: ["inherit", "inherit", "inherit"] })
+process.chdir(__dirname)
+
+spawnSync("tsc", ["-p", "src"], { stdio: "inherit" })
 
