@@ -1,28 +1,9 @@
-import assert from "assert"
 import {
-  execFile,
   spawn,
-  ChildProcess,
-  ExecFileOptions,
   SpawnOptions,
   SpawnOptionsWithoutStdio,
   SpawnOptionsWithStdioTuple,
 } from "child_process"
-
-export const run = (cmd: string, args: string[], opts: ExecFileOptions = {}) =>
-  new Promise<{
-    code: number
-    stdout: string
-    stderr: string
-  }>((resolve, reject) => {
-    const child: ChildProcess = execFile(
-      cmd,
-      args,
-      opts,
-      (err, stdout, stderr) =>
-        err ? reject(err) : resolve({ code: child.exitCode!, stdout, stderr }),
-    )
-  })
 
 export type SpawnArgs = {
   cmd: string
@@ -40,7 +21,7 @@ export const call = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
   const stream = spawn(cmd, args, options)
   const done = Promise.all([
     new Promise((resolve) => stream.once("exit", resolve)),
-    new Promise((resolve) => stream.once("close", resolve))
+    new Promise((resolve) => stream.once("close", resolve)),
   ])
 
   if (stdin !== undefined) {
@@ -59,7 +40,7 @@ export const pipe = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
   const stream = spawn(cmd, args, options)
   const done = Promise.all([
     new Promise((resolve) => stream.once("exit", resolve)),
-    new Promise((resolve) => stream.once("close", resolve))
+    new Promise((resolve) => stream.once("close", resolve)),
   ])
 
   const out_buf: any = []
