@@ -1,14 +1,6 @@
 #!/usr/bin/env ts-node
 
-import { call } from "./src/node/sub_process"
+import { spawnSync } from "child_process"
 
-const main = async () => {
-  process.chdir(__dirname)
-  await call({
-    cmd: "tsc",
-    args: ["-p", "src"],
-  })
-}
-
-main()
+spawnSync("tsc", ["-p", "src"], { stdio: ["inherit", "inherit", "inherit"] })
 
