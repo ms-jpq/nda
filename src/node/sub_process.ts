@@ -68,10 +68,10 @@ export const pipe = async ({ cmd, args, stdin, opts = {} }: SpawnArgs) => {
   let stderr: Buffer | undefined = undefined
 
   stream.stdout.on("data", (chunk) => out_buf.push(chunk))
-  stream.stdout.on("close", () => (stdout = Buffer.concat(out_buf)))
+  stream.stdout.once("close", () => (stdout = Buffer.concat(out_buf)))
 
   stream.stderr.on("data", (chunk) => err_buf.push(chunk))
-  stream.stderr.on("close", () => (stderr = Buffer.concat(err_buf)))
+  stream.stderr.once("close", () => (stderr = Buffer.concat(err_buf)))
 
   if (stdin !== undefined) {
     await new Promise((resolve, reject) => {

@@ -6,9 +6,6 @@ import { big_print } from "./src/node/console"
 import { join } from "./src/isomorphic/iterator"
 import { slurp } from "./src/node/fs"
 
-const dist_dir = "./dist"
-const port = 8080
-
 const watch = (settings: Settings) =>
   nodemon(settings)
     .on("start", () => {
@@ -20,7 +17,7 @@ const watch = (settings: Settings) =>
     })
 
 const main = async () => {
-  const exts = ["ts", "scss", "html"]
+  const exts = ["ts"]
   const git_ignore = await slurp(".gitignore")
   const ignore = parse(git_ignore)
   watch({
@@ -31,3 +28,4 @@ const main = async () => {
 }
 
 main()
+
