@@ -142,7 +142,7 @@ export const zip = function* <T, U>(
 export const longzip = function* <T, U>(
   iterable1: Iterable<T>,
   iterable2: Iterable<U>,
-): Generator<[T, U]> {
+): Generator<[T | undefined, U | undefined]> {
   const [iter1, iter2] = [
     iterable1[Symbol.iterator](),
     iterable2[Symbol.iterator](),
