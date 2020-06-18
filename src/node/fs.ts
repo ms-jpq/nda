@@ -1,9 +1,18 @@
 import { dirname, join, relative } from "path"
-import { exists as exists_cb, promises as fs } from "fs"
+import {
+  exists as exists_cb,
+  realpath as realpath_cb,
+  promises as fs,
+} from "fs"
 import { flat_map, group_by, map } from "../isomorphic/iterator"
 
 export const exists = (path: string) =>
   new Promise<boolean>((resolve) => exists_cb(path, resolve))
+
+export const realpath = (path: string) =>
+  new Promise<string>((resolve, reject) =>
+    realpath_cb(path, (err, real) => (err ? reject() : resolve(real))),
+  )
 
 export const isfile = async (path: string) =>
   (await exists(path)) && (await fs.lstat(path)).isFile()
