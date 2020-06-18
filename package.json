@@ -28,7 +28,8 @@
   "scripts": {
     "build": "./build.ts",
     "postinstall": "npm run build",
-    "pretty": "prettier --write **/**.tsx --write **/**.ts"
+    "pretty": "prettier --write **/**.ts"
   },
   "version": "1.0.0"
 }
+
