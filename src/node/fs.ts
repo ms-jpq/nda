@@ -1,15 +1,19 @@
 import { dirname, join, relative } from "path"
-import { exists as exists_cb, promises as fs } from "fs"
+import {
+  exists as exists_cb,
+  realpath as realpath_cb,
+  promises as fs,
+} from "fs"
 import { flat_map, group_by, map } from "../isomorphic/iterator"
 
 export const exists = (path: string) =>
   new Promise<boolean>((resolve) => exists_cb(path, resolve))
 
 export const isfile = async (path: string) =>
-  (await exists(path)) && (await fs.lstat(path)).isFile()
+  (await exists(path)) && (await fs.stat(path)).isFile()
 
 export const isdir = async (path: string) =>
-  (await exists(path)) && (await fs.lstat(path)).isDirectory()
+  (await exists(path)) && (await fs.stat(path)).isDirectory()
 
 export const mkdir = (path: string) => fs.mkdir(path, { recursive: true })
 
@@ -18,7 +22,7 @@ export const rm = async (path: string) => {
   if (!exist) {
     return
   }
-  const stat = fs.lstat(path)
+  const stat = fs.stat(path)
   if ((await stat).isDirectory()) {
     return fs.rmdir(path, { recursive: true })
   } else {
@@ -72,7 +76,7 @@ export const readdir = async (
 }
 
 export const cp = async (src: string, dest: string) => {
-  const stat = await fs.lstat(src)
+  const stat = await fs.stat(src)
   if (stat.isFile()) {
     await mkdir(dirname(dest))
     await fs.copyFile(src, dest)
