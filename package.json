@@ -19,7 +19,6 @@
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
-  "main": "./test/entry.ts",
   "name": "nda",
   "repository": {
     "type": "git",
