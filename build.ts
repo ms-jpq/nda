@@ -4,7 +4,8 @@ import { spawnSync } from "child_process"
 
 process.chdir(__dirname)
 
-const proc = spawnSync("tsc", ["-p", "src"], { stdio: "inherit" })
+const proc = spawnSync("tsc", ["-p", "src", "--outDir", "dist"], {
+  stdio: "inherit",
+})
 
 process.exit(proc.status || undefined)
-
