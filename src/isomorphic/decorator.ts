@@ -25,7 +25,7 @@ export const throttle = <F extends (...args: any[]) => any>(
     }
     throttling = true
     setTimeout(unthrottle, ms)
-    fn(...args)
+    return fn(...args)
   }
 
   return (...args: Parameters<F>) => {
@@ -33,7 +33,7 @@ export const throttle = <F extends (...args: any[]) => any>(
     if (throttling) {
       s = setTimeout(throttled, ms, ...args)
     } else {
-      throttled(...args)
+      return throttled(...args)
     }
   }
 }
