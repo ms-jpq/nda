@@ -6,6 +6,4 @@ set -o pipefail
 
 cd "$(dirname "$0")" || exit 1
 
-PATH="$PWD/node_modules/.bin:$PATH"
-
-./build.ts
+tsc -p 'src' --outDir 'dist'
