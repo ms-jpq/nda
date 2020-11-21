@@ -26,7 +26,7 @@
   },
   "scripts": {
     "build": "./build.sh",
-    "postinstall": "./build.sh",
+    "install": "./build.sh",
     "pretty": "prettier --write **/**.ts"
   },
   "version": "1.0.0"
