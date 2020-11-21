@@ -25,7 +25,7 @@
     "url": "git+https://github.com/ms-jpq/nda.git"
   },
   "scripts": {
-    "build": "./build.ts",
+    "build": "./build.sh",
     "postinstall": "npm run build",
     "pretty": "prettier --write **/**.ts"
   },
