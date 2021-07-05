@@ -45,7 +45,7 @@ export const queue = <T>() => {
     }
   }
 
-  const take_n = function*(n: number) {
+  const take_n = function* (n: number) {
     for (const _ of range(1, n)) {
       if (c === 0) {
         break

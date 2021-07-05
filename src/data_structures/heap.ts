@@ -62,7 +62,7 @@ export const put = <T>(key: number, val: T, heap: Heap<T>) => {
   swap_up(heap)
 }
 
-export const take_n = function*<T>(n: number, heap: Heap<T>) {
+export const take_n = function* <T>(n: number, heap: Heap<T>) {
   for (const _ of range(1, n)) {
     if (heap.length === 0) {
       break
