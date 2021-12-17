@@ -3,25 +3,24 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "checkJs": true,
-    "declaration": true,
+    "checkJs": false,
+    "declaration": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "ESNext",
     "moduleResolution": "Node",
-    "newLine": "LF",
     "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "outDir": "./dist",
     "removeComments": true,
-    "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "ES2015",
-    "useDefineForClassFields": true
+    "target": "ESNext"
   },
-  "exclude": ["**/node_modules/**", "test", "dist"],
-  "include": ["*.ts", "*.tsx", "*/**/*.ts", "*/**/*.tsx"]
+  "exclude": ["node_modules/**"],
+  "include": ["**/*.ts", "**/*.tsx"]
 }
