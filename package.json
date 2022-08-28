@@ -6,7 +6,7 @@
   },
   "description": "_",
   "exports": {
-    "./*.js": "./src/*.js"
+    "./*.js": "./dist/src/*.js"
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
@@ -17,8 +17,8 @@
   },
   "scripts": {
     "build": "node ./build.mjs",
-    "postinstall": "node ./build.mjs",
-    "test": "node --test -- ./tests/"
+    "postinstall": "npm run build",
+    "test": "node --test -- ./dist/tests/"
   },
   "type": "module",
   "version": "1.0.0"

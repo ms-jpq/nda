@@ -2,7 +2,3 @@
 node_modules/
 dist/
 package-lock.json
-*d.ts
-*.js
-*.map
-*.tsbuildinfo
