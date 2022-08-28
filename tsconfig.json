@@ -4,7 +4,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "checkJs": true,
-    "declaration": false,
+    "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "jsx": "react",
