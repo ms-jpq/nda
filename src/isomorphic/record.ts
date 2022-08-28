@@ -1,4 +1,4 @@
-import { map } from "./iterator"
+import { map } from "./iterator.js"
 
 export const of_list = <T>(iterator: Iterable<[string, any]>) => {
   const obj = Object.create(null)

@@ -1,4 +1,4 @@
-import { str } from "./prelude"
+import { str } from "./prelude.js"
 
 export const range = function* (begin: number, end: number, step = 1) {
   let nxt = begin

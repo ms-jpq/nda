@@ -1,4 +1,3 @@
-import { assert } from "../../src/isomorphic/assertion"
 import {
   chunk,
   drop,
@@ -6,97 +5,87 @@ import {
   range,
   sort_by_keys,
   take,
-} from "../../src/isomorphic/iterator"
+} from "../../src/isomorphic/iterator.js"
+import { ok as assert } from "node:assert"
+import { test } from "node:test"
 
-const range_1 = () => {
+test("range_1", async () => {
   const coll = [...range(0, 1)]
 
   assert(coll.length === 2)
-}
+})
 
-const range_2 = () => {
+test("range_2", async () => {
   const coll = [...range(0, 0)]
 
   assert(coll.length === 1)
-}
+})
 
-const chunk_1 = () => {
+test("chunk_1", async () => {
   const long = range(1, 7)
   const lst = [...chunk(3, long)]
 
   assert(lst.length === 3)
-  assert(lst[0].length === 3)
-  assert(lst[1].length === 3)
-  assert(lst[2].length === 1)
-}
+  assert(lst[0]?.length === 3)
+  assert(lst[1]?.length === 3)
+  assert(lst[2]?.length === 1)
+})
 
-const chunk_2 = () => {
+test("chunk_2", async () => {
   const long = range(1, 6)
   const lst = [...chunk(3, long)]
 
   assert(lst.length === 2)
-  assert(lst[0].length === 3)
-  assert(lst[1].length === 3)
-}
+  assert(lst[0]?.length === 3)
+  assert(lst[1]?.length === 3)
+})
 
-const chunk_3 = () => {
+test("chunk_3", async () => {
   const long = range(1, 2)
   const lst = [...chunk(3, long)]
 
   assert(lst.length === 1)
-  assert(lst[0].length === 2)
-}
+  assert(lst[0]?.length === 2)
+})
 
-const drop_1 = () => {
+test("drop_1", async () => {
   const lst = [...drop(5, range(1, 10))]
 
   assert(lst.length === 5)
-}
 
-const drop_2 = () => {
+  assert
+})
+
+test("drop_2", async () => {
   const lst = [...take(5, drop(5, range(1, Infinity)))]
 
   assert(lst.length === 5)
   assert(lst[0] === 6)
-}
+})
 
-const take_1 = () => {
+test("take_1", async () => {
   const lst = [...take(5, range(1, 10))]
 
   assert(lst.length === 5)
-}
+})
 
-const take_2 = () => {
+test("take_2", async () => {
   const lst = [...take(5, range(1, Infinity))]
 
   assert(lst.length === 5)
-}
+})
 
-const interlace_1 = () => {
+test("interlace_1", async () => {
   const lst = [...interlace(0, range(1, 5))]
 
   assert(lst.length === 9)
-}
+})
 
-const sort_by_keys_1 = () => {
+test("sort_by_keys_1", async () => {
   const set = new Set(range(5, 1, -1))
   const lst = sort_by_keys((e) => [0, e], set)
 
   assert(lst[0] === 1)
   assert(lst[1] === 2)
   assert(lst[2] === 3)
-}
-
-export const run_iterator = async () => {
-  range_1()
-  range_2()
-  chunk_1()
-  chunk_2()
-  chunk_3()
-  drop_1()
-  drop_2()
-  take_1()
-  take_2()
-  interlace_1()
-  sort_by_keys_1()
-}
+})
