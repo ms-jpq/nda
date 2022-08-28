@@ -6,7 +6,10 @@
   },
   "description": "_",
   "exports": {
-    "./": "./dist/src/"
+    "./": "./dist/src/",
+    "./browser/": "./dist/src/browser/",
+    "./isomorphic/": "./dist/src/isomorphic/",
+    "./node/": "./dist/src/node/"
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
