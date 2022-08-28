@@ -6,10 +6,10 @@
   },
   "description": "_",
   "exports": {
-    "./": "./dist/src/",
-    "./browser/": "./dist/src/browser/",
-    "./isomorphic/": "./dist/src/isomorphic/",
-    "./node/": "./dist/src/node/"
+    "./": "./src/",
+    "./browser/": "./src/browser/",
+    "./isomorphic/": "./src/isomorphic/",
+    "./node/": "./src/node/"
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
@@ -21,7 +21,7 @@
   "scripts": {
     "build": "node ./build.mjs",
     "postinstall": "node ./build.mjs",
-    "test": "node --test -- ./dist"
+    "test": "node --test -- ./tests/"
   },
   "type": "module",
   "version": "1.0.0"

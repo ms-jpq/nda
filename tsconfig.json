@@ -3,24 +3,21 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "checkJs": false,
+    "checkJs": true,
     "declaration": false,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "jsx": "react",
-    "module": "NodeNext",
-    "moduleResolution": "Node",
+    "module": "esnext",
+    "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
-    "outDir": "./dist",
     "removeComments": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "esnext"
   },
-  "exclude": ["node_modules/**"],
   "include": ["**/*.ts", "**/*.tsx"]
 }
