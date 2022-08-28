@@ -7,9 +7,7 @@
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "jsx": "react",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "nodenext",
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
@@ -20,5 +18,5 @@
     "strict": true,
     "target": "esnext"
   },
-  "include": ["**/*.ts", "**/*.tsx"]
+  "include": ["**/*.ts"]
 }
