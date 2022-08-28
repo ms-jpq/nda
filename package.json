@@ -6,7 +6,7 @@
   },
   "description": "_",
   "exports": {
-    "./": "./dist/src"
+    "./": "./dist/src/"
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
