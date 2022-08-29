@@ -6,10 +6,7 @@
   },
   "description": "_",
   "exports": {
-    "./*.js": "./dist/src/*.js",
-    "./iso/*.js": "./dist/src/iso/*.js",
-    "./node/*.js": "./dist/src/node/*.js",
-    "./web/*.js": "./dist/src/web/*.js"
+    "./*.js": "./dist/src/*.js"
   },
   "homepage": "https://ms-jpq.github.io/nda",
   "license": "MIT",
