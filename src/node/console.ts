@@ -1,4 +1,4 @@
-import { assert } from "../isomorphic/assertion.js"
+import { assert } from "../iso/assertion.js"
 import { EOL } from "node:os"
 import { stdout } from "node:process"
 

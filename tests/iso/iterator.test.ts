@@ -5,7 +5,7 @@ import {
   range,
   sort_by_keys,
   take,
-} from "../../src/isomorphic/iterator.js"
+} from "../../src/iso/iterator.js"
 import { ok as assert } from "node:assert"
 import { test } from "node:test"
 

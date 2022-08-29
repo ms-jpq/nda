@@ -1,4 +1,4 @@
-import { tiktok } from "../../src/isomorphic/prelude.js"
+import { tiktok } from "../../src/iso/prelude.js"
 import { test } from "node:test"
 
 test("tik_tok_1", async () => {
