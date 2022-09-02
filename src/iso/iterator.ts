@@ -1,11 +1,5 @@
 import { str, Stringifyable } from "./prelude.js"
 
-export const wrap = function* <T>(iterable: Iterable<T>): IterableIterator<T> {
-  for (const el of iterable) {
-    yield el
-  }
-}
-
 export const range = function* (
   begin: number,
   end: number,
@@ -148,7 +142,7 @@ export const zip = function* <
     readonly [K in keyof T]: T[K] extends Iterable<infer V> ? V : never
   },
 >(...iterables: T): IterableIterator<R> {
-  const iterators = iterables.map((i) => wrap(i))
+  const iterators = iterables.map((i) => i[Symbol.iterator]())
   while (true) {
     const acc = []
     for (const it of iterators) {
@@ -171,7 +165,7 @@ export const long_zip = function* <
       : never
   },
 >(...iterables: T): IterableIterator<R> {
-  const iterators = iterables.map((i) => wrap(i))
+  const iterators = iterables.map((i) => i[Symbol.iterator]())
   while (true) {
     const acc = iterators.map((i) => i.next())
     if (all((r) => r.done ?? false, acc)) {
