@@ -1,6 +1,16 @@
-import { str } from "./prelude.js"
+import { str, Stringifyable } from "./prelude.js"
 
-export const range = function* (begin: number, end: number, step = 1) {
+export const wrap = function* <T>(iterable: Iterable<T>): IterableIterator<T> {
+  for (const el of iterable) {
+    yield el
+  }
+}
+
+export const range = function* (
+  begin: number,
+  end: number,
+  step = 1,
+): IterableIterator<number> {
   let nxt = begin
   const cmp =
     step > 0
@@ -12,7 +22,10 @@ export const range = function* (begin: number, end: number, step = 1) {
   }
 }
 
-export const generate = function* <T>(gen: () => T, n: number) {
+export const generate = function* <T>(
+  gen: () => T,
+  n: number,
+): IterableIterator<T> {
   for (const _ of range(1, n)) {
     yield gen()
   }
@@ -20,15 +33,17 @@ export const generate = function* <T>(gen: () => T, n: number) {
 
 export const enumerate = function* <T>(
   iterable: Iterable<T>,
-): Generator<[number, T]> {
-  let idx = 0
+  start: number = 0,
+): IterableIterator<readonly [number, T]> {
   for (const el of iterable) {
-    yield [idx, el]
-    idx += 1
+    yield [start++, el]
   }
 }
 
-export const take = function* <T>(n: number, iterable: Iterable<T>) {
+export const take = function* <T>(
+  n: number,
+  iterable: Iterable<T>,
+): IterableIterator<T> {
   for (const [idx, el] of enumerate(iterable)) {
     if (idx >= n) {
       break
@@ -37,7 +52,10 @@ export const take = function* <T>(n: number, iterable: Iterable<T>) {
   }
 }
 
-export const drop = function* <T>(n: number, iterable: Iterable<T>) {
+export const drop = function* <T>(
+  n: number,
+  iterable: Iterable<T>,
+): IterableIterator<T> {
   for (const [idx, el] of enumerate(iterable)) {
     if (idx >= n) {
       yield el
@@ -45,7 +63,10 @@ export const drop = function* <T>(n: number, iterable: Iterable<T>) {
   }
 }
 
-export const map = function* <T, U>(trans: (_: T) => U, iterable: Iterable<T>) {
+export const map = function* <T, U>(
+  trans: (_: T) => U,
+  iterable: Iterable<T>,
+): IterableIterator<U> {
   for (const el of iterable) {
     yield trans(el)
   }
@@ -54,7 +75,7 @@ export const map = function* <T, U>(trans: (_: T) => U, iterable: Iterable<T>) {
 export const flat_map = function* <T, U>(
   trans: (_: T) => Iterable<U>,
   iterable: Iterable<T>,
-) {
+): IterableIterator<U> {
   for (const el of iterable) {
     yield* trans(el)
   }
@@ -63,7 +84,7 @@ export const flat_map = function* <T, U>(
 export const compact_map = function* <T, U>(
   trans: (_: T) => U | undefined,
   iterable: Iterable<T>,
-) {
+): IterableIterator<U> {
   for (const el of iterable) {
     const nxt = trans(el)
     if (nxt !== undefined) {
@@ -75,7 +96,7 @@ export const compact_map = function* <T, U>(
 export const filter = function* <T>(
   predicate: (_: T) => boolean,
   iterable: Iterable<T>,
-) {
+): IterableIterator<T> {
   for (const el of iterable) {
     if (predicate(el)) {
       yield el
@@ -87,7 +108,7 @@ export const reduce = <T, U>(
   trans: (_: U, __: T) => U,
   init: U,
   iterable: Iterable<T>,
-) => {
+): U => {
   let acc = init
   for (const el of iterable) {
     acc = trans(acc, el)
@@ -98,12 +119,12 @@ export const reduce = <T, U>(
 export const count_by = <T>(
   predicate: (_: T) => boolean | number,
   iterable: Iterable<T>,
-) => reduce((a, e) => a + (predicate(e) as number), 0, iterable)
+): number => reduce((a, e) => a + (predicate(e) as number), 0, iterable)
 
 export const find_by = <T>(
   predicate: (_: T) => boolean,
   iterable: Iterable<T>,
-) => {
+): T | undefined => {
   for (const el of iterable) {
     if (predicate(el)) {
       return el
@@ -121,38 +142,42 @@ export const has = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
   return false
 }
 
-export const zip = function* <T, U>(
-  iterable1: Iterable<T>,
-  iterable2: Iterable<U>,
-): Generator<[T, U]> {
-  const [iter1, iter2] = [
-    iterable1[Symbol.iterator](),
-    iterable2[Symbol.iterator](),
-  ]
+export const zip = function* <
+  T extends Iterable<unknown>[],
+  R extends {
+    readonly [K in keyof T]: T[K] extends Iterable<infer V> ? V : never
+  },
+>(...iterables: T): IterableIterator<R> {
+  const iterators = iterables.map((i) => wrap(i))
   while (true) {
-    const [r1, r2] = [iter1.next(), iter2.next()]
-    if (r1.done || r2.done) {
-      break
-    } else {
-      yield [r1.value, r2.value]
+    const acc = []
+    for (const it of iterators) {
+      const { done, value } = it.next()
+      if (done) {
+        return
+      } else {
+        acc.push(value)
+      }
     }
+    yield acc as unknown as R
   }
 }
 
-export const longzip = function* <T, U>(
-  iterable1: Iterable<T>,
-  iterable2: Iterable<U>,
-): Generator<[T | undefined, U | undefined]> {
-  const [iter1, iter2] = [
-    iterable1[Symbol.iterator](),
-    iterable2[Symbol.iterator](),
-  ]
+export const long_zip = function* <
+  T extends Iterable<unknown>[],
+  R extends {
+    readonly [K in keyof T]: T[K] extends Iterable<infer V>
+      ? V | undefined
+      : never
+  },
+>(...iterables: T): IterableIterator<R> {
+  const iterators = iterables.map((i) => wrap(i))
   while (true) {
-    const [r1, r2] = [iter1.next(), iter2.next()]
-    if (r1.done && r2.done) {
+    const acc = iterators.map((i) => i.next())
+    if (all((r) => r.done ?? false, acc)) {
       break
     } else {
-      yield [r1.value, r2.value]
+      yield acc.map((r) => r.value) as unknown as R
     }
   }
 }
@@ -184,11 +209,11 @@ export const all = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
   return acc
 }
 
-export const group_by = <T, U extends keyof any>(
-  key_by: (_: T) => U,
+export const group_by = <T>(
+  key_by: (_: T) => PropertyKey,
   iterable: Iterable<T>,
 ) => {
-  const res = new Map<U, T[] | undefined>()
+  const res = new Map<PropertyKey, T[] | undefined>()
   for (const el of iterable) {
     const key = key_by(el)
     if (!res.has(key)) {
@@ -246,7 +271,10 @@ export const chunk = function* <T>(size: number, iterable: Iterable<T>) {
   yield coll
 }
 
-export const join = <T>(sep: string, iterable: Iterable<T>) => {
+export const join = <T extends Stringifyable>(
+  sep: string,
+  iterable: Iterable<T>,
+) => {
   let s = ""
   for (const el of interlace(sep, map(str, iterable))) {
     s += el

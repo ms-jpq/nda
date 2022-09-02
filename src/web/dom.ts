@@ -9,22 +9,23 @@ export const $$ = <E extends HTMLElement = HTMLElement>(
 ) => [...base.querySelectorAll(selector)] as E[]
 
 export const ready = () =>
-  new Promise<void>((resolve) =>
-    document.addEventListener("DOMContentLoaded", resolve as any, {
+  new Promise<Event>((resolve) =>
+    document.addEventListener("DOMContentLoaded", resolve, {
       once: true,
     }),
   )
 
 export const wait_frame = () => new Promise<number>(requestAnimationFrame)
 
-export const animation_loop = async function* () {
-  while (true) {
-    const elapsed = await wait_frame()
-    yield elapsed
+export const animation_loop =
+  async function* (): AsyncIterableIterator<number> {
+    while (true) {
+      const elapsed = await wait_frame()
+      yield elapsed
+    }
   }
-}
 
-export const download = (uri: string, name = "") => {
+export const download = (uri: string, name = ""): undefined => {
   const a = document.createElement("a")
   a.style.display = "none"
   a.target = "_blank"
@@ -33,4 +34,5 @@ export const download = (uri: string, name = "") => {
   document.body.append(a)
   a.click()
   a.remove()
+  return
 }

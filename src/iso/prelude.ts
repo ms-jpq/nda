@@ -1,10 +1,12 @@
 export const id = <T>(x: T) => x
 
-export const str = (thing: any): string => thing.toString()
+export type Stringifyable = { toString: () => string }
+
+export const str = (thing: Stringifyable): string => thing.toString()
 
 export const future = <T>() => {
-  let resolve: (value: T) => void = undefined as any as (err: any) => void
-  let reject: (err: any) => void = undefined as any as (err: any) => void
+  let resolve: (value: T) => void = undefined as unknown as (err: any) => void
+  let reject: (err: any) => void = undefined as unknown as (err: any) => void
   const promise = new Promise<T>((res, rej) => {
     resolve = (value) => res(value)
     reject = (err) => rej(err)
@@ -12,16 +14,16 @@ export const future = <T>() => {
   return { promise, resolve, reject }
 }
 
-export const sleep = (ms: number) =>
+export const sleep = (ms: number): Promise<void> =>
   new Promise<void>((resolve) => setTimeout(resolve, ms))
 
-export const counter = () =>
+export const counter: () => () => number = () =>
   (
     (i) => () =>
-      (i += 1)
+      i++
   )(0)
 
-export const timer = () => {
+export const timer: () => () => number = () => {
   let prev = performance.now()
   return () => {
     const temp = prev
@@ -30,7 +32,9 @@ export const timer = () => {
   }
 }
 
-export const tiktok = async function* (ms: number) {
+export const tiktok = async function* (
+  ms: number,
+): AsyncIterableIterator<number> {
   const inc = counter()
   while (true) {
     yield inc()

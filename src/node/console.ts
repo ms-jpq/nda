@@ -2,7 +2,7 @@ import { assert } from "../iso/assertion.js"
 import { EOL } from "node:os"
 import { stdout } from "node:process"
 
-export const big_print = (str: string, top = " ", btm = " ") => {
+export const big_print = (str: string, top = " ", btm = " ") : string=> {
   assert(top.length == 1 && btm.length == 1)
   const { columns } = stdout
   const t = top.repeat(columns)
