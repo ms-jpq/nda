@@ -98,10 +98,9 @@ export const filter = function* <T>(
 
 export const reduce = <T, U>(
   trans: (_: U, __: T) => U,
-  init: U,
+  acc: U,
   iterable: Iterable<T>,
 ): U => {
-  let acc = init
   for (const el of iterable) {
     acc = trans(acc, el)
   }
