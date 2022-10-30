@@ -276,7 +276,10 @@ export const unique_by = function* <T, U>(
   }
 }
 
-export const chunk = function* <T>(size: number, iterable: Iterable<T>) {
+export const chunk = function* <T>(
+  size: number,
+  iterable: Iterable<T>,
+): IterableIterator<T[]> {
   let coll = new Array<T>()
   for (const [idx, el] of enumerate(iterable)) {
     if (idx % size === 0 && idx !== 0) {
