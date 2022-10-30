@@ -1,9 +1,9 @@
-export const $ = <E extends HTMLElement = HTMLElement>(
+export const $ = <E extends Element = HTMLElement>(
   selector: string,
   base = document.body,
 ) => (base.querySelector(selector) ?? undefined) as E | undefined
 
-export const $$ = <E extends HTMLElement = HTMLElement>(
+export const $$ = <E extends Element = HTMLElement>(
   selector: string,
   base = document.body,
 ) => [...base.querySelectorAll(selector)] as E[]

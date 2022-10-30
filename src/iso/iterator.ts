@@ -1,5 +1,3 @@
-import { str, Stringifyable } from "./prelude.js"
-
 export const range = function* (
   begin: number,
   end: number,
@@ -127,7 +125,10 @@ export const find_by = <T>(
   return undefined
 }
 
-export const has = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
+export const has = <T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+): boolean => {
   for (const el of iterable) {
     if (predicate(el)) {
       return true
@@ -176,7 +177,10 @@ export const long_zip = function* <
   }
 }
 
-export const interlace = function* <T>(e: T, iterable: Iterable<T>) {
+export const interlace = function* <T>(
+  e: T,
+  iterable: Iterable<T>,
+): IterableIterator<T> {
   let fst = true
   for (const el of iterable) {
     if (!fst) {
@@ -187,38 +191,57 @@ export const interlace = function* <T>(e: T, iterable: Iterable<T>) {
   }
 }
 
-export const any = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
+export const any = <T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+): boolean => {
   let acc = false
   for (const el of iterable) {
     acc = acc || predicate(el)
+    if (acc) {
+      break
+    }
   }
   return acc
 }
 
-export const all = <T>(predicate: (_: T) => boolean, iterable: Iterable<T>) => {
+export const all = <T>(
+  predicate: (_: T) => boolean,
+  iterable: Iterable<T>,
+): boolean => {
   let acc = true
   for (const el of iterable) {
     acc = acc && predicate(el)
+    if (!acc) {
+      break
+    }
   }
   return acc
 }
 
-export const group_by = <T>(
-  key_by: (_: T) => PropertyKey,
+export const group_by = <T, U>(
+  key_by: (_: T) => U,
   iterable: Iterable<T>,
-) => {
-  const res = new Map<PropertyKey, T[] | undefined>()
+): Map<U, T[]> => {
+  const res = new Map<U, T[]>()
+
   for (const el of iterable) {
     const key = key_by(el)
-    if (!res.has(key)) {
-      res.set(key, [])
+    let acc = res.get(key)
+    if (!acc) {
+      acc = []
+      res.set(key, acc)
     }
-    res.get(key)!.push(el)
+    acc.push(el)
   }
+
   return res
 }
 
-export const sort_by = <T>(key_by: (_: T) => number, iterable: Iterable<T>) => {
+export const sort_by = <T>(
+  key_by: (_: T) => number,
+  iterable: Iterable<T>,
+): T[] => {
   const sort = (a: T, b: T) => key_by(a) - key_by(b)
   return [...iterable].sort(sort)
 }
@@ -226,7 +249,7 @@ export const sort_by = <T>(key_by: (_: T) => number, iterable: Iterable<T>) => {
 export const sort_by_keys = <T>(
   keys_by: (_: T) => number[],
   iterable: Iterable<T>,
-) => {
+): T[] => {
   const sort = (a: T, b: T) => {
     const zipped = zip(keys_by(a), keys_by(b))
     for (const [lhs, rhs] of zipped) {
@@ -242,7 +265,7 @@ export const sort_by_keys = <T>(
 export const unique_by = function* <T, U>(
   key_by: (_: T) => U,
   iterable: Iterable<T>,
-) {
+): IterableIterator<T> {
   const set = new Set<U>()
   for (const el of iterable) {
     const key = key_by(el)
@@ -265,13 +288,6 @@ export const chunk = function* <T>(size: number, iterable: Iterable<T>) {
   yield coll
 }
 
-export const join = <T extends Stringifyable>(
-  sep: string,
-  iterable: Iterable<T>,
-) => {
-  let s = ""
-  for (const el of interlace(sep, map(str, iterable))) {
-    s += el
-  }
-  return s
+export const join = <T>(sep: string, iterable: Iterable<T>) => {
+  return [map(String, iterable)].join(sep)
 }

@@ -1,12 +1,8 @@
 export const id = <T>(x: T) => x
 
-export type Stringifyable = { toString: () => string }
-
-export const str = (thing: Stringifyable): string => thing.toString()
-
 export const future = <T>() => {
-  let resolve: (value: T) => void = undefined as unknown as (err: any) => void
-  let reject: (err: any) => void = undefined as unknown as (err: any) => void
+  let resolve: (value: T) => void = undefined as unknown as any
+  let reject: (err: unknown) => void = undefined as unknown as any
   const promise = new Promise<T>((res, rej) => {
     resolve = (value) => res(value)
     reject = (err) => rej(err)
