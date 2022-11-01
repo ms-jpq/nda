@@ -15,12 +15,12 @@ export const ready = () =>
     }),
   )
 
-export const wait_frame = () => new Promise<number>(requestAnimationFrame)
+export const animation_frame = () => new Promise<number>(requestAnimationFrame)
 
 export const animation_loop =
   async function* (): AsyncIterableIterator<number> {
     while (true) {
-      const elapsed = await wait_frame()
+      const elapsed = await animation_frame()
       yield elapsed
     }
   }
