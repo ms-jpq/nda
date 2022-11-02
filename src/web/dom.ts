@@ -19,11 +19,11 @@ export const animation_frame = () => new Promise<number>(requestAnimationFrame)
 
 export const animation_loop =
   async function* (): AsyncIterableIterator<number> {
-    let t0 = undefined as number | undefined;
+    let prev = undefined as number | undefined;
     while (true) {
       const now = await animation_frame();
-      yield t0 ?? now - now;
-      t0 = now;
+      yield now - (prev ?? now);
+      prev = now;
     }
   };
 
