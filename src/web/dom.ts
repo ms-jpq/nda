@@ -19,11 +19,13 @@ export const animation_frame = () => new Promise<number>(requestAnimationFrame)
 
 export const animation_loop =
   async function* (): AsyncIterableIterator<number> {
+    let t0 = undefined as number | undefined;
     while (true) {
-      const elapsed = await animation_frame()
-      yield elapsed
+      const now = await animation_frame();
+      yield t0 ?? now - now;
+      t0 = now;
     }
-  }
+  };
 
 export const download = (uri: string, name = ""): undefined => {
   const a = document.createElement("a")
