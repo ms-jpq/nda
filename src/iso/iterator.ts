@@ -168,7 +168,7 @@ export const long_zip = function* <
   const iterators = iterables.map((i) => i[Symbol.iterator]())
   while (true) {
     const acc = iterators.map((i) => i.next())
-    if (all((r) => r.done ?? false, acc)) {
+    if (acc.every((r) => r.done ?? false)) {
       break
     } else {
       yield acc.map((r) => r.value) as unknown as R
