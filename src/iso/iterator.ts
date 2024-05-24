@@ -15,11 +15,11 @@ export const range = function* (
 }
 
 export const generate = function* <T>(
-  gen: () => T,
-  n: number,
+  gen: (_: number) => T,
+  n: number = Infinity,
 ): IterableIterator<T> {
-  for (const _ of range(1, n)) {
-    yield gen()
+  for (const i of range(1, n)) {
+    yield gen(i)
   }
 }
 
@@ -56,8 +56,8 @@ export const drop = function* <T>(
 }
 
 export const map = function* <T, U>(
-  trans: (_: T) => U,
   iterable: Iterable<T>,
+  trans: (_: T) => U,
 ): IterableIterator<U> {
   for (const el of iterable) {
     yield trans(el)
@@ -65,8 +65,8 @@ export const map = function* <T, U>(
 }
 
 export const flat_map = function* <T, U>(
-  trans: (_: T) => Iterable<U>,
   iterable: Iterable<T>,
+  trans: (_: T) => Iterable<U>,
 ): IterableIterator<U> {
   for (const el of iterable) {
     yield* trans(el)
@@ -74,8 +74,8 @@ export const flat_map = function* <T, U>(
 }
 
 export const compact_map = function* <T, U>(
-  trans: (_: T) => U | undefined,
   iterable: Iterable<T>,
+  trans: (_: T) => U | undefined,
 ): IterableIterator<U> {
   for (const el of iterable) {
     const nxt = trans(el)
@@ -86,8 +86,8 @@ export const compact_map = function* <T, U>(
 }
 
 export const filter = function* <T>(
-  predicate: (_: T) => boolean,
   iterable: Iterable<T>,
+  predicate: (_: T) => boolean = Boolean,
 ): IterableIterator<T> {
   for (const el of iterable) {
     if (predicate(el)) {
@@ -97,9 +97,9 @@ export const filter = function* <T>(
 }
 
 export const reduce = <T, U>(
-  trans: (_: U, __: T) => U,
   acc: U,
   iterable: Iterable<T>,
+  trans: (_: U, __: T) => U,
 ): U => {
   for (const el of iterable) {
     acc = trans(acc, el)
@@ -108,13 +108,13 @@ export const reduce = <T, U>(
 }
 
 export const count_by = <T>(
-  predicate: (_: T) => boolean | number,
   iterable: Iterable<T>,
-): number => reduce((a, e) => a + (predicate(e) as number), 0, iterable)
+  predicate: (_: T) => boolean | number = Boolean,
+): number => reduce(0, iterable, (a, e) => a + (predicate(e) as number))
 
 export const find_by = <T>(
-  predicate: (_: T) => boolean,
   iterable: Iterable<T>,
+  predicate: (_: T) => boolean = Boolean,
 ): T | undefined => {
   for (const el of iterable) {
     if (predicate(el)) {
@@ -122,18 +122,6 @@ export const find_by = <T>(
     }
   }
   return undefined
-}
-
-export const has = <T>(
-  predicate: (_: T) => boolean,
-  iterable: Iterable<T>,
-): boolean => {
-  for (const el of iterable) {
-    if (predicate(el)) {
-      return true
-    }
-  }
-  return false
 }
 
 export const zip = function* <
@@ -157,7 +145,7 @@ export const zip = function* <
   }
 }
 
-export const long_zip = function* <
+export const zip_longest = function* <
   T extends Iterable<unknown>[],
   R extends {
     readonly [K in keyof T]: T[K] extends Iterable<infer V>
@@ -191,31 +179,27 @@ export const interlace = function* <T>(
 }
 
 export const any = <T>(
-  predicate: (_: T) => boolean,
   iterable: Iterable<T>,
+  predicate: (_: T) => boolean = Boolean,
 ): boolean => {
-  let acc = false
   for (const el of iterable) {
-    acc = acc || predicate(el)
-    if (acc) {
-      break
+    if (predicate(el)) {
+      return true
     }
   }
-  return acc
+  return false
 }
 
 export const all = <T>(
-  predicate: (_: T) => boolean,
   iterable: Iterable<T>,
+  predicate: (_: T) => boolean = Boolean,
 ): boolean => {
-  let acc = true
   for (const el of iterable) {
-    acc = acc && predicate(el)
-    if (!acc) {
-      break
+    if (!predicate(el)) {
+      return false
     }
   }
-  return acc
+  return true
 }
 
 export const group_by = <T, U>(
@@ -238,16 +222,16 @@ export const group_by = <T, U>(
 }
 
 export const sort_by = <T>(
-  key_by: (_: T) => number,
   iterable: Iterable<T>,
+  key_by: (_: T) => number,
 ): T[] => {
   const sort = (a: T, b: T) => key_by(a) - key_by(b)
   return [...iterable].sort(sort)
 }
 
 export const sort_by_keys = <T>(
-  keys_by: (_: T) => number[],
   iterable: Iterable<T>,
+  keys_by: (_: T) => number[],
 ): T[] => {
   const sort = (a: T, b: T) => {
     const zipped = zip(keys_by(a), keys_by(b))
@@ -262,8 +246,8 @@ export const sort_by_keys = <T>(
 }
 
 export const unique_by = function* <T, U>(
-  key_by: (_: T) => U,
   iterable: Iterable<T>,
+  key_by: (_: T) => U,
 ): IterableIterator<T> {
   const set = new Set<U>()
   for (const el of iterable) {
@@ -291,5 +275,5 @@ export const chunk = function* <T>(
 }
 
 export const join = <T>(sep: string, iterable: Iterable<T>) => {
-  return [map(String, iterable)].join(sep)
+  return [map(iterable, String)].join(sep)
 }
