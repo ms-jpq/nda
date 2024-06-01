@@ -14,7 +14,7 @@ export const range = function* (
   }
 }
 
-export const generate = function* <T>(
+export const generate = function* <const T>(
   gen: (_: number) => T,
   n: number = Infinity,
 ): IterableIterator<T> {
@@ -23,7 +23,7 @@ export const generate = function* <T>(
   }
 }
 
-export const enumerate = function* <T>(
+export const enumerate = function* <const T>(
   iterable: Iterable<T>,
   start: number = 0,
 ): IterableIterator<readonly [number, T]> {
@@ -32,7 +32,7 @@ export const enumerate = function* <T>(
   }
 }
 
-export const take = function* <T>(
+export const take = function* <const T>(
   n: number,
   iterable: Iterable<T>,
 ): IterableIterator<T> {
@@ -44,7 +44,7 @@ export const take = function* <T>(
   }
 }
 
-export const drop = function* <T>(
+export const drop = function* <const T>(
   n: number,
   iterable: Iterable<T>,
 ): IterableIterator<T> {
@@ -55,7 +55,7 @@ export const drop = function* <T>(
   }
 }
 
-export const map = function* <T, U>(
+export const map = function* <const T, const U>(
   iterable: Iterable<T>,
   trans: (_: T) => U,
 ): IterableIterator<U> {
@@ -64,7 +64,7 @@ export const map = function* <T, U>(
   }
 }
 
-export const flat_map = function* <T, U>(
+export const flat_map = function* <const T, const U>(
   iterable: Iterable<T>,
   trans: (_: T) => Iterable<U>,
 ): IterableIterator<U> {
@@ -73,7 +73,7 @@ export const flat_map = function* <T, U>(
   }
 }
 
-export const compact_map = function* <T, U>(
+export const compact_map = function* <const T, const U>(
   iterable: Iterable<T>,
   trans: (_: T) => U | undefined,
 ): IterableIterator<U> {
@@ -85,7 +85,7 @@ export const compact_map = function* <T, U>(
   }
 }
 
-export const filter = function* <T>(
+export const filter = function* <const T>(
   iterable: Iterable<T>,
   predicate: (_: T) => boolean = Boolean,
 ): IterableIterator<T> {
@@ -96,7 +96,7 @@ export const filter = function* <T>(
   }
 }
 
-export const reduce = <T, U>(
+export const reduce = <const T, U>(
   acc: U,
   iterable: Iterable<T>,
   trans: (_: U, __: T) => U,
@@ -107,7 +107,7 @@ export const reduce = <T, U>(
   return acc
 }
 
-export const count_by = <T>(
+export const count_by = <const T>(
   iterable: Iterable<T>,
   predicate: (_: T) => boolean | number = Boolean,
 ): number => reduce(0, iterable, (a, e) => a + (predicate(e) as number))
@@ -125,20 +125,21 @@ export const find_by = <T>(
 }
 
 export const zip = function* <
-  T extends Iterable<unknown>[],
-  R extends {
+  const T extends Iterable<unknown>[],
+  const R extends {
     readonly [K in keyof T]: T[K] extends Iterable<infer V> ? V : never
   },
 >(...iterables: T): IterableIterator<R> {
+  type Item = R[keyof R]
   const iterators = iterables.map((i) => i[Symbol.iterator]())
   while (true) {
-    const acc = []
+    const acc = new Array<Item>()
     for (const it of iterators) {
       const { done, value } = it.next()
       if (done) {
         return
       } else {
-        acc.push(value)
+        acc.push(value as Item)
       }
     }
     yield acc as unknown as R
@@ -146,8 +147,8 @@ export const zip = function* <
 }
 
 export const zip_longest = function* <
-  T extends Iterable<unknown>[],
-  R extends {
+  const T extends Iterable<unknown>[],
+  const R extends {
     readonly [K in keyof T]: T[K] extends Iterable<infer V>
       ? V | undefined
       : never
@@ -164,7 +165,7 @@ export const zip_longest = function* <
   }
 }
 
-export const interlace = function* <T>(
+export const interlace = function* <const T>(
   e: T,
   iterable: Iterable<T>,
 ): IterableIterator<T> {
@@ -178,7 +179,7 @@ export const interlace = function* <T>(
   }
 }
 
-export const any = <T>(
+export const any = <const T>(
   iterable: Iterable<T>,
   predicate: (_: T) => boolean = Boolean,
 ): boolean => {
@@ -190,7 +191,7 @@ export const any = <T>(
   return false
 }
 
-export const all = <T>(
+export const all = <const T>(
   iterable: Iterable<T>,
   predicate: (_: T) => boolean = Boolean,
 ): boolean => {
@@ -202,7 +203,7 @@ export const all = <T>(
   return true
 }
 
-export const group_by = <T, U>(
+export const group_by = <const T, const U>(
   key_by: (_: T) => U,
   iterable: Iterable<T>,
 ): Map<U, T[]> => {
@@ -221,7 +222,7 @@ export const group_by = <T, U>(
   return res
 }
 
-export const sort_by = <T>(
+export const sort_by = <const T>(
   iterable: Iterable<T>,
   key_by: (_: T) => number,
 ): T[] => {
@@ -229,7 +230,7 @@ export const sort_by = <T>(
   return [...iterable].sort(sort)
 }
 
-export const sort_by_keys = <T>(
+export const sort_by_keys = <const T>(
   iterable: Iterable<T>,
   keys_by: (_: T) => number[],
 ): T[] => {
@@ -245,7 +246,7 @@ export const sort_by_keys = <T>(
   return [...iterable].sort(sort)
 }
 
-export const unique_by = function* <T, U>(
+export const unique_by = function* <const T, const U>(
   iterable: Iterable<T>,
   key_by: (_: T) => U,
 ): IterableIterator<T> {
@@ -259,7 +260,7 @@ export const unique_by = function* <T, U>(
   }
 }
 
-export const chunk = function* <T>(
+export const chunk = function* <const T>(
   size: number,
   iterable: Iterable<T>,
 ): IterableIterator<T[]> {
@@ -274,6 +275,6 @@ export const chunk = function* <T>(
   yield coll
 }
 
-export const join = <T>(sep: string, iterable: Iterable<T>) => {
+export const join = <const T>(sep: string, iterable: Iterable<T>) => {
   return [map(iterable, String)].join(sep)
 }

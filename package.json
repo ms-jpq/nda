@@ -19,7 +19,7 @@
   "scripts": {
     "build": "node ./build.mjs",
     "postinstall": "npm run build",
-    "test": "node --test -- ./dist/tests/"
+    "test": "node --test -- ./dist/src/"
   },
   "type": "module",
   "version": "1.0.0"

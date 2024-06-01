@@ -1,6 +1,6 @@
-export const id = <T>(x: T) => x
+export const id = <const T>(x: T) => x
 
-export const future = <T>() => {
+export const future = <const T>() => {
   let resolve: (value: T) => void = undefined as unknown as any
   let reject: (err: unknown) => void = undefined as unknown as any
   const promise = new Promise<T>((res, rej) => {

@@ -1,6 +1,6 @@
 type Timeout = string | number | NodeJS.Timeout | undefined
 
-export const debounce = <F extends (..._: unknown[]) => unknown>(
+export const debounce = <const F extends (..._: unknown[]) => unknown>(
   ms: number,
   fn: F,
 ): ((..._: Parameters<F>) => undefined) => {
@@ -13,7 +13,7 @@ export const debounce = <F extends (..._: unknown[]) => unknown>(
   }
 }
 
-export const throttle = <R, F extends (..._: unknown[]) => R>(
+export const throttle = <const R, const F extends (..._: unknown[]) => R>(
   ms: number,
   fn: F,
 ): ((..._: Parameters<F>) => R | undefined) => {

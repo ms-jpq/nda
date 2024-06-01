@@ -1,3 +1,5 @@
+import { ok as assert } from "node:assert"
+import { test } from "node:test"
 import {
   chunk,
   drop,
@@ -5,9 +7,7 @@ import {
   range,
   sort_by_keys,
   take,
-} from "../../src/iso/iterator.js"
-import { ok as assert } from "node:assert"
-import { test } from "node:test"
+} from "./iterator.js"
 
 test("range_1", async () => {
   const coll = [...range(0, 1)]
@@ -83,7 +83,7 @@ test("interlace_1", async () => {
 
 test("sort_by_keys_1", async () => {
   const set = new Set(range(5, 1, -1))
-  const lst = sort_by_keys((e) => [0, e], set)
+  const lst = sort_by_keys(set, (e) => [0, e])
 
   assert(lst[0] === 1)
   assert(lst[1] === 2)

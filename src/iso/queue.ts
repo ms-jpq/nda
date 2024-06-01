@@ -1,4 +1,4 @@
-export const queue = <T>() => {
+export const queue = <const T>() => {
   const a = new Array<T>()
   const b = new Array<T>()
 
