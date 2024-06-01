@@ -17,8 +17,7 @@
     "url": "git+https://github.com/ms-jpq/nda.git"
   },
   "scripts": {
-    "build": "node ./build.mjs",
-    "postinstall": "npm run build",
+    "postinstall": "tsc",
     "test": "node --test -- ./dist/src/"
   },
   "type": "module",
