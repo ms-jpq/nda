@@ -1,15 +1,5 @@
 export const id = <const T>(x: T) => x
 
-export const future = <const T>() => {
-  let resolve: (value: T) => void = undefined as unknown as any
-  let reject: (err: unknown) => void = undefined as unknown as any
-  const promise = new Promise<T>((res, rej) => {
-    resolve = (value) => res(value)
-    reject = (err) => rej(err)
-  })
-  return { promise, resolve, reject }
-}
-
 export const sleep = (ms: number): Promise<void> =>
   new Promise<void>((resolve) => setTimeout(resolve, ms))
 

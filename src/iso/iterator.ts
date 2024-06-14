@@ -278,3 +278,49 @@ export const chunk = function* <const T>(
 export const join = <const T>(sep: string, iterable: Iterable<T>) => {
   return [map(iterable, String)].join(sep)
 }
+
+const wrap = async <const T, const M>(
+  meta: M,
+  promise: Promise<T>,
+): Promise<T & M> => {
+  const result = await promise
+  return { ...result, ...meta }
+}
+
+export const merge = async function* <const T>(
+  ...sts: AsyncIterable<T>[]
+): AsyncIterableIterator<T> {
+  const aiters = sts.map((st) => st[Symbol.asyncIterator]())
+  const running = new Map(
+    aiters.map((st) => [st, wrap({ st }, st.next())] as const),
+  )
+  try {
+    while (running.size) {
+      const { st, done, value } = await Promise.race(running.values())
+      if (done) {
+        running.delete(st)
+        await st.return?.()
+      } else {
+        running.set(st, wrap({ st }, st.next()))
+        yield value
+      }
+    }
+  } finally {
+    const fin = await Promise.allSettled(
+      [...running.keys()].map((st) => st.return?.()),
+    )
+
+    const errors = [
+      ...(function* () {
+        for (const result of fin) {
+          if (result.status === "rejected") {
+            yield result.reason
+          }
+        }
+      })(),
+    ]
+    if (errors.length) {
+      throw new AggregateError(errors)
+    }
+  }
+}
