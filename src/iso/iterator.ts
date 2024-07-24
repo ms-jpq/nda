@@ -1,18 +1,17 @@
-export const range = function* (
-  begin: number,
-  end: number,
-  step = 1,
-): IterableIterator<number> {
-  let nxt = begin
-  const cmp =
-    step > 0
-      ? (l: number, r: number) => l <= r
-      : (l: number, r: number) => l >= r
-  while (cmp(nxt, end)) {
-    yield nxt
-    nxt = nxt + step
-  }
-}
+export const range = (begin: number, end: number, step = 1): Iterable<number> =>
+  Object.freeze({
+    *[Symbol.iterator]() {
+      let nxt = begin
+      const cmp =
+        step > 0
+          ? (l: number, r: number) => l <= r
+          : (l: number, r: number) => l >= r
+      while (cmp(nxt, end)) {
+        yield nxt
+        nxt = nxt + step
+      }
+    },
+  })
 
 export const generate = function* <const T>(
   gen: (_: number) => T,
