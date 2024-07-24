@@ -39,6 +39,12 @@ test("range_5", async () => {
   deepEqual(coll, [3, 2])
 })
 
+test("range_6", async () => {
+  const coll = [...range(4)]
+
+  deepEqual(coll, [0, 1, 2, 3])
+})
+
 test("chunk_1", async () => {
   const long = range(1, 8)
   const lst = [...chunk(3, long)]
