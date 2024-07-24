@@ -11,7 +11,6 @@ export const range = (
         step > 0
           ? (l: number, r: number) => l < r
           : (l: number, r: number) => l > r
-      console.log({ eof, nxt })
       while (cmp(nxt, eof)) {
         yield nxt
         nxt = nxt + step
