@@ -1,4 +1,4 @@
-import { ok as assert } from "node:assert"
+import { ok as assert, deepEqual } from "node:assert/strict"
 import { test } from "node:test"
 import {
   chunk,
@@ -12,13 +12,31 @@ import {
 test("range_1", async () => {
   const coll = [...range(0, 1)]
 
-  assert(coll.length === 2)
+  deepEqual(coll, [0])
 })
 
 test("range_2", async () => {
   const coll = [...range(0, 0)]
 
-  assert(coll.length === 1)
+  deepEqual(coll, [])
+})
+
+test("range_3", async () => {
+  const coll = [...range(0)]
+
+  deepEqual(coll, [])
+})
+
+test("range_4", async () => {
+  const coll = [...range(0, -1)]
+
+  deepEqual(coll, [])
+})
+
+test("range_5", async () => {
+  const coll = [...range(3, 1, -1)]
+
+  deepEqual(coll, [3, 2])
 })
 
 test("chunk_1", async () => {

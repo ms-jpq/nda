@@ -19,7 +19,7 @@
   "scripts": {
     "build": "npm run postinstall",
     "postinstall": "tsc",
-    "test": "node --test -- ./dist/src/"
+    "test": "node --test -- ./dist/src/**/*.js"
   },
   "type": "module",
   "version": "1.0.0"
