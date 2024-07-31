@@ -234,15 +234,27 @@ export const sort_by = <const T>(
   return [...iterable].sort(sort)
 }
 
-export const sort_by_keys = <const T>(
+export const sort_by_keys = <
+  const T,
+  const R extends (number | bigint | string)[],
+>(
   iterable: Iterable<T>,
-  keys_by: (_: T) => number[],
+  keys_by: (_: T) => R,
 ): T[] => {
   const sort = (a: T, b: T) => {
     const zipped = zip(keys_by(a), keys_by(b))
     for (const [lhs, rhs] of zipped) {
-      if (lhs !== rhs) {
-        return lhs - rhs
+      const tl = typeof lhs
+      const tr = typeof rhs
+      if (tl !== tr) {
+        throw new TypeError(`${tl} <> ${tr}`)
+      } else if (tl === "string") {
+        return (lhs as string).localeCompare(rhs as string)
+      } else {
+        const d = (lhs as number) - (rhs as number)
+        if (d) {
+          return d
+        }
       }
     }
     return 0
