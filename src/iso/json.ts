@@ -1,4 +1,4 @@
-export const loads = <T = unknown>(json: string) =>
+export const loads = <const T = unknown>(json: string) =>
   JSON.parse(json, (_, v) =>
     v !== null && typeof v === "object"
       ? Object.assign(Object.create(null), v)
