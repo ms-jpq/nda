@@ -183,6 +183,22 @@ export const interlace = function* <const T>(
   }
 }
 
+export const interleave = function* <const T, const U>(
+  iterable1: Iterable<T>,
+  iterable2: Iterable<U>,
+): IterableIterator<T | U> {
+  const iters = [iterable1, iterable2].map((it) => it[Symbol.iterator]())
+  while (true) {
+    for (const it of iters) {
+      const { done, value } = it.next()
+      if (done) {
+        break
+      }
+      yield value
+    }
+  }
+}
+
 export const any = <const T>(
   iterable: Iterable<T>,
   predicate: (_: T) => boolean = Boolean,
