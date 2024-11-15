@@ -32,17 +32,17 @@ export const generate = function* <const T>(
 }
 
 export const enumerate = function* <const T>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   start: number = 0,
 ): IterableIterator<readonly [number, T]> {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     yield [start++, el]
   }
 }
 
 export const take = function* <const T>(
   n: number,
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
 ): IterableIterator<T> {
   for (const [idx, el] of enumerate(iterable)) {
     if (idx >= n) {
@@ -64,28 +64,28 @@ export const drop = function* <const T>(
 }
 
 export const map = function* <const T, const U>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   trans: (_: T) => U,
 ): IterableIterator<U> {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     yield trans(el)
   }
 }
 
 export const flat_map = function* <const T, const U>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   trans: (_: T) => Iterable<U>,
 ): IterableIterator<U> {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     yield* trans(el)
   }
 }
 
 export const compact_map = function* <const T, const U>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   trans: (_: T) => U | undefined,
 ): IterableIterator<U> {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     const nxt = trans(el)
     if (nxt !== undefined) {
       yield nxt
@@ -94,10 +94,10 @@ export const compact_map = function* <const T, const U>(
 }
 
 export const filter = function* <const T>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   predicate: (_: T) => boolean = Boolean,
 ): IterableIterator<T> {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     if (predicate(el)) {
       yield el
     }
@@ -106,25 +106,25 @@ export const filter = function* <const T>(
 
 export const reduce = <const T, U>(
   acc: U,
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   trans: (_: U, __: T) => U,
 ): U => {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     acc = trans(acc, el)
   }
   return acc
 }
 
 export const count_by = <const T>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   predicate: (_: T) => boolean | number = Boolean,
 ): number => reduce(0, iterable, (a, e) => a + (predicate(e) as number))
 
 export const find_by = <T>(
-  iterable: Iterable<T>,
+  iterable: Iterable<T> | undefined,
   predicate: (_: T) => boolean = Boolean,
 ): T | undefined => {
-  for (const el of iterable) {
+  for (const el of iterable ?? []) {
     if (predicate(el)) {
       return el
     }
@@ -133,13 +133,13 @@ export const find_by = <T>(
 }
 
 export const zip = function* <
-  const T extends Iterable<unknown>[],
+  const T extends (Iterable<unknown> | undefined)[],
   const R extends {
     readonly [K in keyof T]: T[K] extends Iterable<infer V> ? V : never
   },
 >(...iterables: T): IterableIterator<R> {
   type Item = R[keyof R]
-  const iterators = iterables.map((i) => i[Symbol.iterator]())
+  const iterators = compact_map(iterables, (i) => i?.[Symbol.iterator]())
   while (true) {
     const acc = new Array<Item>()
     for (const it of iterators) {
