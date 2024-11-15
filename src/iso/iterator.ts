@@ -18,6 +18,10 @@ export const range = (
     },
   })
 
+export const pure = function* <const T>(s: T): IterableIterator<T> {
+  yield s
+}
+
 export const generate = function* <const T>(
   gen: (_: number) => T,
   n: number = Infinity,
