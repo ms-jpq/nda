@@ -314,7 +314,7 @@ export const chunk = function* <const T>(
 }
 
 export const join = <const T>(sep: string, iterable: Iterable<T>) => {
-  return [map(iterable, String)].join(sep)
+  return [...map(iterable, String)].join(sep)
 }
 
 const wrap = async <const T, const M>(
