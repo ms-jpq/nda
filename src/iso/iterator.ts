@@ -139,8 +139,8 @@ export const zip = function* <
   },
 >(...iterables: T): IterableIterator<R> {
   type Item = R[keyof R]
-  const iterators = compact_map(iterables, (i) => i?.[Symbol.iterator]())
-  while (true) {
+  const iterators = [...compact_map(iterables, (i) => i?.[Symbol.iterator]())]
+  while (iterators.length) {
     const acc = new Array<Item>()
     for (const it of iterators) {
       const { done, value } = it.next()
@@ -163,7 +163,7 @@ export const zip_longest = function* <
   },
 >(...iterables: T): IterableIterator<R> {
   const iterators = iterables.map((i) => i[Symbol.iterator]())
-  while (true) {
+  while (iterators.length) {
     const acc = iterators.map((i) => i.next())
     if (acc.every((r) => r.done ?? false)) {
       break
